@@ -1,8 +1,10 @@
 from flask import Flask, jsonify, request, send_file, abort
 import os
 import json
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # Base directory setup
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -16,46 +18,55 @@ def load_locations(directory):
     if os.path.exists(location_file):
         with open(location_file, 'r') as file:
             return json.load(file)
+    else:
+        print(f"Warning: {location_file} not found.")
     return []
 
-# Load elevation, water-level, and swot locations
+# Load elevation, water-level, and SWOT locations
 elevation_locations = load_locations(elevation_dir)
 water_level_locations = load_locations(water_level_dir)
-swot_locations = load_locations(swot_dir)  # Load SWOT locations
+swot_locations = load_locations(swot_dir)
 
 # Helper function to get image path
 def get_image_path(directory, name):
     if not name.endswith('.png'):
         name = f"{name}.png"
-    
+
     png_path = os.path.join(directory, 'png', name)
     print(f"Looking for image at: {png_path}")  # Debug print
     if os.path.exists(png_path):
         return png_path
     return None
 
-
 # Common function to serve images based on directory and name
 def serve_image(directory, name):
     if not name:
         return abort(400, description="Image name is required")
+    
     image_path = get_image_path(directory, name)
     if image_path:
+        print(f"Serving image: {image_path}")
         return send_file(image_path, mimetype='image/png')
+    
+    print(f"Error: Image {name} not found in {directory}")
     return abort(404, description="Image not found")
 
 # Common function to serve JSON data (bounding boxes)
 def serve_json(locations):
+    if not locations:
+        return abort(404, description="No data available")
     return jsonify(locations)
 
 # Common function to get longitude and latitude from image name
 def get_coordinates(locations, name):
     if not name:
         return abort(400, description="Image name is required")
+    
     for loc in locations:
-        if loc['image'] == f"{name}.png":
+        if loc['image'].endswith(f"{name}.png"):
             return jsonify(loc['bounding_box'])
-    return abort(404, description="Coordinates not found")
+    
+    return abort(404, description="Coordinates not found for the specified image")
 
 # Elevation endpoints
 @app.route('/elevation/get_image', methods=['GET'])
@@ -103,4 +114,5 @@ def get_swot_coordinates():
     return get_coordinates(swot_locations, name)
 
 if __name__ == '__main__':
-    app.run(port=5001)
+    # Enable debugging, auto-restart the server if code changes
+    app.run(port=5001, debug=True)

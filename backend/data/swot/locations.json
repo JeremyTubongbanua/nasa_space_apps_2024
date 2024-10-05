@@ -1,5 +1,69 @@
 [
     {
+        "name": "SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_354_039F_20240722T131338_20240722T131359_PIC0_01",
+        "csv": "./csv/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_354_039F_20240722T131338_20240722T131359_PIC0_01.csv",
+        "image": "./png/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_354_039F_20240722T131338_20240722T131359_PIC0_01.png",
+        "nc": "./nc/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_354_039F_20240722T131338_20240722T131359_PIC0_01.nc",
+        "bounding_box": {
+            "southwest": {
+                "lat": 43.086634315087416,
+                "lng": -79.27876276057547
+            },
+            "northeast": {
+                "lat": 44.45798134963732,
+                "lng": -77.38699127272714
+            }
+        }
+    },
+    {
+        "name": "SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_076_040F_20240712T145140_20240712T145201_PIC0_01",
+        "csv": "./csv/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_076_040F_20240712T145140_20240712T145201_PIC0_01.csv",
+        "image": "./png/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_076_040F_20240712T145140_20240712T145201_PIC0_01.png",
+        "nc": "./nc/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_076_040F_20240712T145140_20240712T145201_PIC0_01.nc",
+        "bounding_box": {
+            "southwest": {
+                "lat": 41.96905048243793,
+                "lng": -80.11013303321445
+            },
+            "northeast": {
+                "lat": 43.33101617966152,
+                "lng": -78.27822780289831
+            }
+        }
+    },
+    {
+        "name": "SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_382_040F_20240723T131429_20240723T131450_PIC0_01",
+        "csv": "./csv/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_382_040F_20240723T131429_20240723T131450_PIC0_01.csv",
+        "image": "./png/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_382_040F_20240723T131429_20240723T131450_PIC0_01.png",
+        "nc": "./nc/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_382_040F_20240723T131429_20240723T131450_PIC0_01.nc",
+        "bounding_box": {
+            "southwest": {
+                "lat": 41.97493196247814,
+                "lng": -81.33769105453483
+            },
+            "northeast": {
+                "lat": 43.34265937371239,
+                "lng": -79.4845468566204
+            }
+        }
+    },
+    {
+        "name": "SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_076_039F_20240712T145120_20240712T145141_PIC0_01",
+        "csv": "./csv/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_076_039F_20240712T145120_20240712T145141_PIC0_01.csv",
+        "image": "./png/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_076_039F_20240712T145120_20240712T145141_PIC0_01.png",
+        "nc": "./nc/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_076_039F_20240712T145120_20240712T145141_PIC0_01.nc",
+        "bounding_box": {
+            "southwest": {
+                "lat": 43.08783270494306,
+                "lng": -80.50958625276566
+            },
+            "northeast": {
+                "lat": 44.447814759164366,
+                "lng": -78.63191109211112
+            }
+        }
+    },
+    {
         "name": "SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_021_076_039F_20240913T050635_20240913T050656_PIC0_01",
         "csv": "./csv/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_021_076_039F_20240913T050635_20240913T050656_PIC0_01.csv",
         "image": "./png/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_021_076_039F_20240913T050635_20240913T050656_PIC0_01.png",
@@ -12,6 +76,134 @@
             "northeast": {
                 "lat": 44.466085755626615,
                 "lng": -78.62209145035035
+            }
+        }
+    },
+    {
+        "name": "SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_119_115F_20240714T040857_20240714T040918_PIC0_01",
+        "csv": "./csv/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_119_115F_20240714T040857_20240714T040918_PIC0_01.csv",
+        "image": "./png/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_119_115F_20240714T040857_20240714T040918_PIC0_01.png",
+        "nc": "./nc/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_119_115F_20240714T040857_20240714T040918_PIC0_01.nc",
+        "bounding_box": {
+            "southwest": {
+                "lat": 41.97934145166111,
+                "lng": -79.80948436346334
+            },
+            "northeast": {
+                "lat": 43.34152385096219,
+                "lng": -77.93937348308486
+            }
+        }
+    },
+    {
+        "name": "SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_119_116F_20240714T040917_20240714T040938_PIC0_01",
+        "csv": "./csv/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_119_116F_20240714T040917_20240714T040938_PIC0_01.csv",
+        "image": "./png/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_119_116F_20240714T040917_20240714T040938_PIC0_01.png",
+        "nc": "./nc/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_119_116F_20240714T040917_20240714T040938_PIC0_01.nc",
+        "bounding_box": {
+            "southwest": {
+                "lat": 43.085029622954316,
+                "lng": -79.44531688293674
+            },
+            "northeast": {
+                "lat": 44.45089117580181,
+                "lng": -77.54755235354895
+            }
+        }
+    },
+    {
+        "name": "SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_354_039F_20240722T131338_20240722T131359_PIC0_01",
+        "csv": "./csv/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_354_039F_20240722T131338_20240722T131359_PIC0_01.csv",
+        "image": "./png/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_354_039F_20240722T131338_20240722T131359_PIC0_01.png",
+        "nc": "./nc/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_354_039F_20240722T131338_20240722T131359_PIC0_01.nc",
+        "bounding_box": {
+            "southwest": {
+                "lat": 43.07441005896951,
+                "lng": -79.29681616105007
+            },
+            "northeast": {
+                "lat": 44.4625891629274,
+                "lng": -77.38168908009227
+            }
+        }
+    },
+    {
+        "name": "SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_076_040F_20240712T145140_20240712T145201_PIC0_01",
+        "csv": "./csv/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_076_040F_20240712T145140_20240712T145201_PIC0_01.csv",
+        "image": "./png/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_076_040F_20240712T145140_20240712T145201_PIC0_01.png",
+        "nc": "./nc/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_076_040F_20240712T145140_20240712T145201_PIC0_01.nc",
+        "bounding_box": {
+            "southwest": {
+                "lat": 41.97400282969638,
+                "lng": -80.10418658914247
+            },
+            "northeast": {
+                "lat": 43.330962006301824,
+                "lng": -78.2668754454118
+            }
+        }
+    },
+    {
+        "name": "SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_382_040F_20240723T131429_20240723T131450_PIC0_01",
+        "csv": "./csv/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_382_040F_20240723T131429_20240723T131450_PIC0_01.csv",
+        "image": "./png/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_382_040F_20240723T131429_20240723T131450_PIC0_01.png",
+        "nc": "./nc/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_382_040F_20240723T131429_20240723T131450_PIC0_01.nc",
+        "bounding_box": {
+            "southwest": {
+                "lat": 41.961468839052785,
+                "lng": -81.35480442358033
+            },
+            "northeast": {
+                "lat": 43.342585279322094,
+                "lng": -79.4835506428948
+            }
+        }
+    },
+    {
+        "name": "SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_076_039F_20240712T145120_20240712T145141_PIC0_01",
+        "csv": "./csv/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_076_039F_20240712T145120_20240712T145141_PIC0_01.csv",
+        "image": "./png/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_076_039F_20240712T145120_20240712T145141_PIC0_01.png",
+        "nc": "./nc/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_076_039F_20240712T145120_20240712T145141_PIC0_01.nc",
+        "bounding_box": {
+            "southwest": {
+                "lat": 43.09283533944739,
+                "lng": -80.52983760637566
+            },
+            "northeast": {
+                "lat": 44.44939033676028,
+                "lng": -78.62209145035035
+            }
+        }
+    },
+    {
+        "name": "SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_119_115F_20240714T040857_20240714T040918_PIC0_01",
+        "csv": "./csv/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_119_115F_20240714T040857_20240714T040918_PIC0_01.csv",
+        "image": "./png/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_119_115F_20240714T040857_20240714T040918_PIC0_01.png",
+        "nc": "./nc/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_119_115F_20240714T040857_20240714T040918_PIC0_01.nc",
+        "bounding_box": {
+            "southwest": {
+                "lat": 41.97516738221719,
+                "lng": -79.79042177000093
+            },
+            "northeast": {
+                "lat": 43.32449619127299,
+                "lng": -77.96324552233874
+            }
+        }
+    },
+    {
+        "name": "SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_119_116F_20240714T040917_20240714T040938_PIC0_01",
+        "csv": "./csv/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_119_116F_20240714T040917_20240714T040938_PIC0_01.csv",
+        "image": "./png/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_119_116F_20240714T040917_20240714T040938_PIC0_01.png",
+        "nc": "./nc/SWOT_L2_HR_Raster_250m_UTM17T_N_x_x_x_018_119_116F_20240714T040917_20240714T040938_PIC0_01.nc",
+        "bounding_box": {
+            "southwest": {
+                "lat": 43.09197756890599,
+                "lng": -79.42694343728795
+            },
+            "northeast": {
+                "lat": 44.440355198301965,
+                "lng": -77.56215508456458
             }
         }
     }
