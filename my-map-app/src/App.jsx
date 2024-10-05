@@ -8,20 +8,18 @@ function App() {
   const [swotData, setSwotData] = useState([]);
   const [overlayVisible, setOverlayVisible] = useState({});
   const [images, setImages] = useState({});
-  const [selectAll, setSelectAll] = useState(true); // Control for select/deselect all
+  const [selectAll, setSelectAll] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
-  // Fetch SWOT data on component mount
   useEffect(() => {
     fetch("http://localhost:5001/swot/get_json")
       .then((response) => response.json())
       .then((data) => {
         setSwotData(data);
-
-        // Initialize visibility state for all overlays (visible by default)
         const visibility = {};
         data.forEach((item) => {
-          visibility[item.name] = true; // Set all overlays to be visible by default
-          fetchImage(item.name); // Fetch images immediately when data is loaded
+          visibility[item.name] = true;
+          fetchImage(item.name);
         });
         setOverlayVisible(visibility);
       })
@@ -31,7 +29,6 @@ function App() {
       });
   }, []);
 
-  // Fetch the image dynamically for a specific overlay
   const fetchImage = (name) => {
     fetch(`http://localhost:5001/swot/get_image?name=${name}`)
       .then((response) => response.blob())
@@ -48,7 +45,6 @@ function App() {
       });
   };
 
-  // Toggle the visibility of a specific overlay
   const toggleOverlay = (name) => {
     const newState = !overlayVisible[name];
     setOverlayVisible((prev) => ({
@@ -57,12 +53,9 @@ function App() {
     }));
   };
 
-  // Toggle all overlays (Select/Deselect All)
   const toggleSelectAll = () => {
     const newState = !selectAll;
     setSelectAll(newState);
-
-    // Update the visibility state for all SWOT items
     const newVisibility = {};
     swotData.forEach((item) => {
       newVisibility[item.name] = newState;
@@ -70,41 +63,25 @@ function App() {
     setOverlayVisible(newVisibility);
   };
 
-  // Helper function to check if bounding boxes intersect
-  const isBoundingBoxIntersecting = (bbox1, bbox2) => {
-    return !(
-      bbox2.southwest.lat > bbox1.northeast.lat ||
-      bbox2.northeast.lat < bbox1.southwest.lat ||
-      bbox2.southwest.lng > bbox1.northeast.lng ||
-      bbox2.northeast.lng < bbox1.southwest.lng
-    );
+  const handleCollapseToggle = () => {
+    setIsCollapsed((prev) => !prev);
   };
 
-  // Handle when a rectangle is drawn
   const handleRectangleDraw = (e) => {
     const bounds = e.layer.getBounds();
     const southwest = bounds.getSouthWest();
     const northeast = bounds.getNorthEast();
 
-    let west = southwest.lng;
-    let east = northeast.lng;
-    let south = southwest.lat;
-    let north = northeast.lat;
+    const west = southwest.lng;
+    const east = northeast.lng;
+    const south = southwest.lat;
+    const north = northeast.lat;
 
-    // Calculate the center point of the bounding box
-    const longitude = (west + east) / 2;
-    const latitude = (south + north) / 2;
-
-    // Create a bounding box
     const drawnBoundingBox = {
       southwest: { lat: south, lng: west },
       northeast: { lat: north, lng: east },
     };
 
-    // Show alert with bounding box data
-    alert(`Bounding box coordinates: West: ${west}, East: ${east}, South: ${south}, North: ${north}`);
-
-    // Find the relevant CSVs whose bounding boxes intersect with the drawn bounding box
     const relevantCSVs = swotData
       .filter((item) => isBoundingBoxIntersecting(drawnBoundingBox, item.bounding_box))
       .map((item) => item.csv);
@@ -114,21 +91,16 @@ function App() {
       return;
     }
 
-    // Prepare data for the POST request, including the center point (longitude, latitude)
     const data = {
       csv_files: relevantCSVs,
       west,
       east,
       south,
       north,
-      lng: longitude,
-      lat: latitude,
+      lng: (west + east) / 2,
+      lat: (south + north) / 2,
     };
 
-    // Show alert with relevant CSVs
-    alert(`Relevant CSVs: ${relevantCSVs.join(", ")}`);
-
-    // Make the POST request to the generate_stl endpoint
     fetch("http://localhost:5001/swot/generate_stl", {
       method: "POST",
       headers: {
@@ -144,8 +116,7 @@ function App() {
         }
       })
       .then((blob) => {
-        alert("STL generation successful! Downloading now...");
-        const url = window.URL.createObjectURL(new Blob([blob]));
+        const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
         link.setAttribute("download", "terrain.stl");
@@ -159,10 +130,19 @@ function App() {
       });
   };
 
+  const isBoundingBoxIntersecting = (bbox1, bbox2) => {
+    return !(
+      bbox2.southwest.lat > bbox1.northeast.lat ||
+      bbox2.northeast.lat < bbox1.southwest.lat ||
+      bbox2.southwest.lng > bbox1.northeast.lng ||
+      bbox2.northeast.lng < bbox1.southwest.lng
+    );
+  };
+
   return (
     <div className="h-screen">
       <MapContainer
-        center={[43.65107, -79.347015]} // Centered in Toronto
+        center={[43.65107, -79.347015]}
         zoom={10}
         style={{ height: "100%", width: "100%" }}
       >
@@ -171,21 +151,19 @@ function App() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {/* Loop through the SWOT data and render image overlays based on bounding boxes */}
         {swotData.map((item) => {
           const bounds = [
             [item.bounding_box.southwest.lat, item.bounding_box.southwest.lng],
             [item.bounding_box.northeast.lat, item.bounding_box.northeast.lng],
           ];
-
           return (
             overlayVisible[item.name] &&
-            images[item.name] && ( // Only show the overlay if it's visible and the image is loaded
+            images[item.name] && (
               <ImageOverlay
                 key={item.name}
-                url={images[item.name]} // Dynamically fetched image URL
+                url={images[item.name]}
                 bounds={bounds}
-                opacity={0.7} // Adjust the opacity as needed
+                opacity={0.7}
               />
             )
           );
@@ -194,7 +172,6 @@ function App() {
         <DrawControl onCreated={handleRectangleDraw} />
       </MapContainer>
 
-      {/* Toggle buttons to control overlays */}
       <div
         className="overlay-controls"
         style={{
@@ -203,11 +180,10 @@ function App() {
           right: 10,
           background: "white",
           padding: 10,
-          zIndex: 1000, // Set a high z-index to make sure it's on top of the map
-          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Optional: for better visibility
+          zIndex: 1000,
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
         }}
       >
-        {/* Select/Deselect All Checkbox */}
         <div>
           <label>
             <input
@@ -219,19 +195,26 @@ function App() {
           </label>
         </div>
 
-        {/* Individual SWOT controls */}
-        {swotData.map((item) => (
-          <div key={item.name}>
-            <label>
-              <input
-                type="checkbox"
-                checked={overlayVisible[item.name] || false}
-                onChange={() => toggleOverlay(item.name)}
-              />
-              {item.name}
-            </label>
+        <button onClick={handleCollapseToggle}>
+          {isCollapsed ? "Expand Options" : "Collapse Options"}
+        </button>
+
+        {!isCollapsed && (
+          <div>
+            {swotData.map((item) => (
+              <div key={item.name}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={overlayVisible[item.name] || false}
+                    onChange={() => toggleOverlay(item.name)}
+                  />
+                  {item.name}
+                </label>
+              </div>
+            ))}
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
