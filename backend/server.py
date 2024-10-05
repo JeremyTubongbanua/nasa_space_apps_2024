@@ -137,6 +137,62 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+@app.route('/elevation/generate_stl', methods=['POST'])
+def generate_elevation_stl():
+    data = request.json
+
+    # Log the incoming request data
+    logger.info(f"Received POST request for Elevation STL generation with data: {data}")
+
+    try:
+        longitude = float(data.get('lng'))
+        latitude = float(data.get('lat'))
+        logger.info(f"Longitude: {longitude}, Latitude: {latitude}")
+    except (TypeError, ValueError) as e:
+        logger.error(f"Invalid longitude/latitude provided: {e}")
+        return abort(400, description="Longitude and latitude are required and must be valid numbers (lng, lat)")
+
+    if not (longitude and latitude):
+        logger.warning("Longitude and latitude are missing from the request")
+        return abort(400, description="Longitude and latitude are required (lng, lat)")
+
+    # Collect relevant CSV files based on the request
+    csv_files = data.get('csv_files')
+    if not csv_files or len(csv_files) == 0:
+        return abort(400, description="CSV files are required for STL generation")
+
+    # Make sure the CSV files exist
+    for csv_file in csv_files:
+        csv_file_path = os.path.join(elevation_dir, csv_file)
+        if not os.path.exists(csv_file_path):
+            logger.error(f"CSV file not found at path: {csv_file_path}")
+            return abort(404, description=f"CSV file not found: {csv_file}")
+
+    output_stl = os.path.join(elevation_dir, 'generated_terrain.stl')  # Output STL file
+
+    # Prepare command to run generate_stl.py with the necessary arguments
+    command = [
+        'python3', os.path.join(elevation_dir, 'csv', 'generate_stl.py'),
+        '--csv_files', *csv_files,
+        '--lng', str(longitude),
+        '--lat', str(latitude),
+        '--output_stl', output_stl
+    ]
+
+    try:
+        logger.info(f"Running command: {' '.join(command)}")
+        result = subprocess.run(command, check=True, capture_output=True, text=True)
+        if result.returncode == 0:
+            logger.info(f"STL file successfully generated: {output_stl}")
+            return send_file(output_stl, as_attachment=True, download_name='elevation_terrain.stl', mimetype='application/sla')
+        else:
+            logger.error(f"STL generation failed with error: {result.stderr}")
+            return abort(500, description=f"Error generating STL: {result.stderr}")
+    except subprocess.CalledProcessError as e:
+        logger.error(f"STL generation process failed: {e.stderr}")
+        return abort(500, description=f"STL generation failed: {e.stderr}")
+
+
 @app.route('/swot/generate_stl', methods=['POST'])
 def generate_stl():
     data = request.json

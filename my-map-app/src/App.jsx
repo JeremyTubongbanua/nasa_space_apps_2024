@@ -9,10 +9,12 @@ function App() {
   const [swotData, setSwotData] = useState([]);
   const [overlayVisible, setOverlayVisible] = useState({});
   const [images, setImages] = useState({});
-  const [selectAll, setSelectAll] = useState(true);
+  const [selectAllElevation, setSelectAllElevation] = useState(true);
+  const [selectAllSwot, setSelectAllSwot] = useState(true);
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   useEffect(() => {
+    // Fetch elevation data
     fetch("http://localhost:5001/elevation/get_json")
       .then((response) => response.json())
       .then((data) => {
@@ -31,6 +33,7 @@ function App() {
         alert("Error fetching elevation data: " + error.message);
       });
 
+    // Fetch SWOT data
     fetch("http://localhost:5001/swot/get_json")
       .then((response) => response.json())
       .then((data) => {
@@ -51,10 +54,11 @@ function App() {
   }, []);
 
   const fetchImage = (type, name) => {
-    const url = type === "elevation" 
-      ? `http://localhost:5001/elevation/get_image?name=${name}` 
-      : `http://localhost:5001/swot/get_image?name=${name}`;
-    
+    const url =
+      type === "elevation"
+        ? `http://localhost:5001/elevation/get_image?name=${name}`
+        : `http://localhost:5001/swot/get_image?name=${name}`;
+
     fetch(url)
       .then((response) => {
         if (!response.ok) {
@@ -82,16 +86,30 @@ function App() {
     }));
   };
 
-  const toggleSelectAll = () => {
-    const newState = !selectAll;
-    setSelectAll(newState);
+  // Toggle all elevation overlays
+  const toggleSelectAllElevation = () => {
+    const newState = !selectAllElevation;
+    setSelectAllElevation(newState);
     const newVisibility = {};
-    [...elevationData, ...swotData].forEach((item) => {
+    elevationData.forEach((item) => {
       if (item.name) {
         newVisibility[item.name] = newState;
       }
     });
-    setOverlayVisible(newVisibility);
+    setOverlayVisible((prev) => ({ ...prev, ...newVisibility }));
+  };
+
+  // Toggle all SWOT overlays
+  const toggleSelectAllSwot = () => {
+    const newState = !selectAllSwot;
+    setSelectAllSwot(newState);
+    const newVisibility = {};
+    swotData.forEach((item) => {
+      if (item.name) {
+        newVisibility[item.name] = newState;
+      }
+    });
+    setOverlayVisible((prev) => ({ ...prev, ...newVisibility }));
   };
 
   const handleCollapseToggle = () => {
@@ -113,17 +131,30 @@ function App() {
       northeast: { lat: north, lng: east },
     };
 
-    const relevantCSVs = [...elevationData, ...swotData]
+    // Generate STL for Elevation
+    const relevantElevationCSVs = elevationData
       .filter((item) =>
         isBoundingBoxIntersecting(drawnBoundingBox, item.bounding_box)
       )
       .map((item) => item.csv);
 
-    if (relevantCSVs.length === 0) {
-      alert("No data points found within the selected area.");
-      return;
+    if (relevantElevationCSVs.length > 0) {
+      generateSTL("elevation", relevantElevationCSVs, west, east, south, north);
     }
 
+    // Generate STL for SWOT
+    const relevantSwotCSVs = swotData
+      .filter((item) =>
+        isBoundingBoxIntersecting(drawnBoundingBox, item.bounding_box)
+      )
+      .map((item) => item.csv);
+
+    if (relevantSwotCSVs.length > 0) {
+      generateSTL("swot", relevantSwotCSVs, west, east, south, north);
+    }
+  };
+
+  const generateSTL = (type, relevantCSVs, west, east, south, north) => {
     const data = {
       csv_files: relevantCSVs,
       west,
@@ -134,7 +165,12 @@ function App() {
       lat: (south + north) / 2,
     };
 
-    fetch("http://localhost:5001/elevation/generate_stl", {
+    const url =
+      type === "elevation"
+        ? "http://localhost:5001/elevation/generate_stl"
+        : "http://localhost:5001/swot/generate_stl";
+
+    fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -145,21 +181,21 @@ function App() {
         if (response.ok) {
           return response.blob();
         } else {
-          throw new Error("STL generation failed");
+          throw new Error(`${type.toUpperCase()} STL generation failed`);
         }
       })
       .then((blob) => {
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "terrain.stl");
+        link.setAttribute("download", `${type}_terrain.stl`);
         document.body.appendChild(link);
         link.click();
         link.parentNode.removeChild(link);
       })
       .catch((error) => {
-        console.error("Error generating STL:", error);
-        alert("Error generating STL: " + error.message);
+        console.error(`Error generating ${type.toUpperCase()} STL:`, error);
+        alert(`Error generating ${type.toUpperCase()} STL: ${error.message}`);
       });
   };
 
@@ -222,10 +258,20 @@ function App() {
           <label>
             <input
               type="checkbox"
-              checked={selectAll}
-              onChange={toggleSelectAll}
+              checked={selectAllElevation}
+              onChange={toggleSelectAllElevation}
             />
-            Select/Deselect All
+            Select/Deselect All Elevation
+          </label>
+        </div>
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              checked={selectAllSwot}
+              onChange={toggleSelectAllSwot}
+            />
+            Select/Deselect All SWOT
           </label>
         </div>
 
