@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, ImageOverlay } from "react-leaflet";
 import "leaflet/dist/leaflet.css"; // Leaflet CSS
 import "leaflet-draw/dist/leaflet.draw.css"; // Leaflet Draw CSS
-import DrawControl from "./DrawControl";
+import DrawControl from "./DrawControl"; // Your DrawControl component
 
 function App() {
   const [swotData, setSwotData] = useState([]);
@@ -25,7 +25,10 @@ function App() {
         });
         setOverlayVisible(visibility);
       })
-      .catch((error) => console.error("Error fetching SWOT data:", error));
+      .catch((error) => {
+        console.error("Error fetching SWOT data:", error);
+        alert("Error fetching SWOT data: " + error.message);
+      });
   }, []);
 
   // Fetch the image dynamically for a specific overlay
@@ -39,7 +42,10 @@ function App() {
           [name]: imageUrl,
         }));
       })
-      .catch((error) => console.error("Error fetching image:", error));
+      .catch((error) => {
+        console.error("Error fetching image:", error);
+        alert("Error fetching image: " + error.message);
+      });
   };
 
   // Toggle the visibility of a specific overlay
@@ -62,6 +68,68 @@ function App() {
       newVisibility[item.name] = newState;
     });
     setOverlayVisible(newVisibility);
+  };
+
+  // Handle when a rectangle is drawn
+  const handleRectangleDraw = (e) => {
+    const bounds = e.layer.getBounds();
+    const southwest = bounds.getSouthWest();
+    const northeast = bounds.getNorthEast();
+
+    // Add a minimum bounding box size check (adjust values as needed)
+    const minDistance = 0.001; // Set a minimum bounding box size
+
+    let west = southwest.lng;
+    let east = northeast.lng;
+    let south = southwest.lat;
+    let north = northeast.lat;
+
+    if (Math.abs(east - west) < minDistance) {
+      east += minDistance; // Expand east to ensure minimum box size
+    }
+    if (Math.abs(north - south) < minDistance) {
+      north += minDistance; // Expand north to ensure minimum box size
+    }
+
+    const data = {
+      west,
+      east,
+      south,
+      north,
+    };
+
+    // Show alert with bounding box data
+    alert(`Bounding box coordinates: West: ${west}, East: ${east}, South: ${south}, North: ${north}`);
+
+    // Make the POST request to the generate_stl endpoint
+    fetch("http://localhost:5001/swot/generate_stl", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.blob();
+        } else {
+          throw new Error("STL generation failed");
+        }
+      })
+      .then((blob) => {
+        alert("STL generation successful! Downloading now...");
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "terrain.stl");
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+      })
+      .catch((error) => {
+        console.error("Error generating STL:", error);
+        alert("Error generating STL: " + error.message);
+      });
   };
 
   return (
@@ -96,7 +164,7 @@ function App() {
           );
         })}
 
-        <DrawControl />
+        <DrawControl onCreated={handleRectangleDraw} />
       </MapContainer>
 
       {/* Toggle buttons to control overlays */}

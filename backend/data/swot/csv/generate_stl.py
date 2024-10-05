@@ -2,14 +2,14 @@ import csv
 import numpy as np
 from stl import mesh
 import argparse
-from scipy.spatial import Delaunay
-from scipy.spatial import ConvexHull
+from scipy.spatial import Delaunay, ConvexHull
 import sys
+import os
 
-def generate_stl(csv_file, west, east, south, north, output_stl):
-    # Load CSV data
-    all_lons, all_lats = [], []
+def load_csv_data(csv_file, west, east, south, north):
+    """Loads and filters data from a single CSV file."""
     lons, lats, water_levels = [], [], []
+    
     with open(csv_file, 'r') as f:
         reader = csv.DictReader(f)
         for row in reader:
@@ -19,38 +19,47 @@ def generate_stl(csv_file, west, east, south, north, output_stl):
                 water_level = float(row['Water_Level'])
             except KeyError as e:
                 raise ValueError(f"KeyError: {e}. Available keys are: {list(row.keys())}")
-            
-            all_lons.append(lon)
-            all_lats.append(lat)
-            
+
             # Filter by boundary box
             if west <= lon <= east and south <= lat <= north:
                 lons.append(lon)
                 lats.append(lat)
                 water_levels.append(water_level)
     
+    return lons, lats, water_levels
+
+def generate_stl(csv_files, west, east, south, north, output_stl):
+    """Generates a single STL file by merging data from multiple CSV files."""
+    
+    all_lons, all_lats, all_water_levels = [], [], []
+    
+    # Load and merge data from all CSV files
+    for csv_file in csv_files:
+        lons, lats, water_levels = load_csv_data(csv_file, west, east, south, north)
+        all_lons.extend(lons)
+        all_lats.extend(lats)
+        all_water_levels.extend(water_levels)
+    
     # Print the total number of data points and the number after filtering
-    print(f"Total data points loaded: {len(all_lons)}")
-    print(f"Data points after filtering: {len(lons)}")
+    print(f"Total data points loaded from all CSV files: {len(all_lons)}")
     
     # Check if enough data points were loaded
-    if len(lons) < 4:
-        raise ValueError(f"Not enough data points ({len(lons)}) within the specified boundaries to perform triangulation.")
-
-    # Normalize the coordinates and water levels
-    lons = np.array(lons)
-    lats = np.array(lats)
-    water_levels = np.array(water_levels)
-
-    # Normalize coordinates to range [0, 150mm]
-    x_normalized = (lons - np.min(lons)) / (np.max(lons) - np.min(lons)) * 150
-    y_normalized = (lats - np.min(lats)) / (np.max(lats) - np.min(lats)) * 150
-
-    # Normalize water levels to range [0, 30mm]
-    if np.max(water_levels) - np.min(water_levels) == 0:
-        z_normalized = np.zeros_like(water_levels)
+    if len(all_lons) < 4:
+        raise ValueError(f"Not enough data points ({len(all_lons)}) within the specified boundaries to perform triangulation.")
+    
+    # Convert lists to NumPy arrays
+    all_lons = np.array(all_lons)
+    all_lats = np.array(all_lats)
+    all_water_levels = np.array(all_water_levels)
+    
+    # Normalize coordinates and water levels
+    x_normalized = (all_lons - np.min(all_lons)) / (np.max(all_lons) - np.min(all_lons)) * 150
+    y_normalized = (all_lats - np.min(all_lats)) / (np.max(all_lats) - np.min(all_lats)) * 150
+    
+    if np.max(all_water_levels) - np.min(all_water_levels) == 0:
+        z_normalized = np.zeros_like(all_water_levels)
     else:
-        z_normalized = (water_levels - np.min(water_levels)) / (np.max(water_levels) - np.min(water_levels)) * 30
+        z_normalized = (all_water_levels - np.min(all_water_levels)) / (np.max(all_water_levels) - np.min(all_water_levels)) * 30
 
     # Prepare points for triangulation
     points2D = np.vstack((x_normalized, y_normalized)).T
@@ -58,7 +67,7 @@ def generate_stl(csv_file, west, east, south, north, output_stl):
     # Check for colinear points
     if np.linalg.matrix_rank(points2D - points2D[0]) < 2:
         raise ValueError("Data points are colinear. Cannot perform Delaunay triangulation.")
-
+    
     # Perform Delaunay triangulation
     tri = Delaunay(points2D)
 
@@ -72,12 +81,12 @@ def generate_stl(csv_file, west, east, south, north, output_stl):
         faces.append([v0, v1, v2])
 
     # --- Add Side Walls and Base to Create Volume ---
-
+    
     # Find the convex hull of the set of points to get the boundary edges
     hull = ConvexHull(points2D)
     boundary_indices = hull.vertices
     num_boundary_points = len(boundary_indices)
-
+    
     # Create side wall faces
     for i in range(num_boundary_points):
         idx_current = boundary_indices[i]
@@ -120,7 +129,7 @@ def generate_stl(csv_file, west, east, south, north, output_stl):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate 3D printable STL from CSV')
-    parser.add_argument('--csv_file', type=str, required=True, help='Path to the CSV file')
+    parser.add_argument('--csv_files', type=str, nargs='+', required=True, help='List of CSV files')
     parser.add_argument('--west', type=float, required=True, help='Western boundary longitude')
     parser.add_argument('--east', type=float, required=True, help='Eastern boundary longitude')
     parser.add_argument('--south', type=float, required=True, help='Southern boundary latitude')
@@ -129,7 +138,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     try:
-        generate_stl(args.csv_file, args.west, args.east, args.south, args.north, args.output_stl)
+        generate_stl(args.csv_files, args.west, args.east, args.south, args.north, args.output_stl)
     except ValueError as e:
         print(f"Error: {e}")
         sys.exit(1)

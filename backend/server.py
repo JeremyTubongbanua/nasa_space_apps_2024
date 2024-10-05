@@ -118,7 +118,6 @@ def get_swot_coordinates():
 # Endpoint to generate STL from bounding box
 @app.route('/swot/generate_stl', methods=['POST'])
 def generate_stl():
-    # Get the bounding box from the request
     data = request.json
     west = data.get('west')
     east = data.get('east')
@@ -128,38 +127,23 @@ def generate_stl():
     if not (west and east and south and north):
         return abort(400, description="Bounding box parameters are required (west, east, south, north)")
 
-    # Correct path to the CSV file
-    csv_file = os.path.join(base_dir, 'data', 'swot', 'csv', 'SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_018_076_039F_20240712T145120_20240712T145141_PIC0_01.csv')
-    
-    # Correct path for the output STL
-    output_stl = os.path.join(base_dir, 'data', 'swot', 'csv', 'generated_terrain.stl')
+    csv_file = os.path.join(csv_dir, 'swot_data.csv')  # Path to your CSV file
+    output_stl = os.path.join(csv_dir, 'generated_terrain.stl')  # Output STL file
 
-    # Path to the generate_stl.py script
-    script_path = os.path.join(base_dir, 'data', 'swot', 'csv', 'generate_stl.py')
-
-    # Run the STL generation script with the corrected paths
-    command = ['python3', script_path, '--csv_file', csv_file, '--west', str(west), '--east', str(east),
+    # Run the STL generation script
+    command = ['python3', os.path.join(csv_dir, 'generate_stl.py'), '--csv_file', csv_file, '--west', str(west), '--east', str(east),
                '--south', str(south), '--north', str(north), '--output_stl', output_stl]
 
     try:
-        print(f"Running command: {command}")
-        subprocess.run(command, check=True)
-        print(f"STL file generated: {output_stl}")
+        result = subprocess.run(command, check=True, capture_output=True, text=True)
+        if result.returncode == 0:
+            print(f"STL file generated: {output_stl}")
+            return send_file(output_stl, as_attachment=True, download_name='terrain.stl', mimetype='application/sla')
+        else:
+            return abort(500, description=f"Error generating STL: {result.stderr}")
     except subprocess.CalledProcessError as e:
         print(f"Error generating STL: {e}")
-        return abort(500, description="Error generating STL")
-
-    # Check if the STL file exists before serving it
-    if not os.path.exists(output_stl):
-        print(f"STL file not found at: {output_stl}")
-        return abort(500, description="STL file was not generated")
-
-    # Serve the generated STL file for download
-    return send_file(output_stl, as_attachment=True, download_name='terrain.stl', mimetype='application/sla')
-
-
-
-
+        return abort(500, description=f"STL generation failed: {e}")
 
 if __name__ == '__main__':
     # Enable debugging, auto-restart the server if code changes

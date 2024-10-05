@@ -1,4 +1,5 @@
 #!/bin/bash
+#exampkle ./generate_stl.sh -80.1 -79.9 43.08 43.12
 # generate_stl.sh
 WEST=$1
 EAST=$2
