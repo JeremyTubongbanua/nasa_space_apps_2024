@@ -161,19 +161,21 @@ def generate_elevation_stl():
     if not csv_files or len(csv_files) == 0:
         return abort(400, description="CSV files are required for STL generation")
 
-    # Make sure the CSV files exist
+    # Make sure the CSV files exist and convert them to absolute paths
+    csv_file_paths = []
     for csv_file in csv_files:
-        csv_file_path = os.path.join(elevation_dir, csv_file)
+        csv_file_path = os.path.abspath(os.path.join(elevation_dir, csv_file))  # Use absolute paths
         if not os.path.exists(csv_file_path):
             logger.error(f"CSV file not found at path: {csv_file_path}")
             return abort(404, description=f"CSV file not found: {csv_file}")
+        csv_file_paths.append(csv_file_path)
 
     output_stl = os.path.join(elevation_dir, 'generated_terrain.stl')  # Output STL file
 
     # Prepare command to run generate_stl.py with the necessary arguments
     command = [
         'python3', os.path.join(elevation_dir, 'csv', 'generate_stl.py'),
-        '--csv_files', *csv_files,
+        '--csv_files', *csv_file_paths,  # Pass absolute paths
         '--lng', str(longitude),
         '--lat', str(latitude),
         '--output_stl', output_stl
