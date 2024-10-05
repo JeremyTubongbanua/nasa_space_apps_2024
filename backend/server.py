@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Base directory setup
-base_dir = os.path.dirname(os.path.abspath(__file__))
+base_dir = os.path.dirname(os.path.abspath(__file__))  # The directory where server.py is located
 elevation_dir = os.path.join(base_dir, 'data', 'elevation')
 water_level_dir = os.path.join(base_dir, 'data', 'water-level')
 swot_dir = os.path.join(base_dir, 'data', 'swot')  # Added SWOT directory
@@ -16,7 +16,7 @@ csv_dir = os.path.join(swot_dir, 'csv')
 
 # Load JSON locations
 def load_locations(directory):
-    location_file = os.path.join(directory, 'locations.json')
+    location_file = os.path.join(directory, 'locations.json')  # Ensure JSON file path is relative
     if os.path.exists(location_file):
         with open(location_file, 'r') as file:
             return json.load(file)
@@ -198,8 +198,6 @@ def generate_stl():
     except subprocess.CalledProcessError as e:
         logger.error(f"STL generation process failed: {e.stderr}")
         return abort(500, description=f"STL generation failed: {e.stderr}")
-
-
 
 
 if __name__ == '__main__':

@@ -1,53 +1,65 @@
 [
     {
-        "image": "OPERA_L3_DSWx-HLS_T17TPH_20230829T160831Z_20230831T182259Z_S2A_30_v1.0_B10_DEM.png",
+        "name": "OPERA_L3_DSWx-HLS_T17TPH_20230829T160831Z_20230831T182259Z_S2A_30_v1.0_B10_DEM",
+        "csv": "./csv/OPERA_L3_DSWx-HLS_T17TPH_20230829T160831Z_20230831T182259Z_S2A_30_v1.0_B10_DEM.csv",
+        "image": "./png/OPERA_L3_DSWx-HLS_T17TPH_20230829T160831Z_20230831T182259Z_S2A_30_v1.0_B10_DEM.png",
+        "tif": "./tif/OPERA_L3_DSWx-HLS_T17TPH_20230829T160831Z_20230831T182259Z_S2A_30_v1.0_B10_DEM.tif",
         "bounding_box": {
             "southwest": {
-                "lat": 4690200.0,
-                "lng": 600000.0
+                "lat": 42.35764145272198,
+                "lng": -79.78571286582691
             },
             "northeast": {
-                "lat": 4800000.0,
-                "lng": 709800.0
+                "lat": 43.32357659590351,
+                "lng": -78.41246381590419
             }
         }
     },
     {
-        "image": "OPERA_L3_DSWx-HLS_T17TNJ_20230829T160831Z_20230831T215718Z_S2A_30_v1.0_B10_DEM.png",
+        "name": "OPERA_L3_DSWx-HLS_T17TNJ_20230829T160831Z_20230831T215718Z_S2A_30_v1.0_B10_DEM",
+        "csv": "./csv/OPERA_L3_DSWx-HLS_T17TNJ_20230829T160831Z_20230831T215718Z_S2A_30_v1.0_B10_DEM.csv",
+        "image": "./png/OPERA_L3_DSWx-HLS_T17TNJ_20230829T160831Z_20230831T215718Z_S2A_30_v1.0_B10_DEM.png",
+        "tif": "./tif/OPERA_L3_DSWx-HLS_T17TNJ_20230829T160831Z_20230831T215718Z_S2A_30_v1.0_B10_DEM.tif",
         "bounding_box": {
             "southwest": {
-                "lat": 4790220.0,
-                "lng": 499980.0
+                "lat": 43.26479037691589,
+                "lng": -81.00024643448813
             },
             "northeast": {
-                "lat": 4900020.0,
-                "lng": 609780.0
+                "lat": 44.24514241136297,
+                "lng": -79.62505994125678
             }
         }
     },
     {
-        "image": "OPERA_L3_DSWx-HLS_T17TNH_20230829T160831Z_20230831T190839Z_S2A_30_v1.0_B10_DEM.png",
+        "name": "OPERA_L3_DSWx-HLS_T17TNH_20230829T160831Z_20230831T190839Z_S2A_30_v1.0_B10_DEM",
+        "csv": "./csv/OPERA_L3_DSWx-HLS_T17TNH_20230829T160831Z_20230831T190839Z_S2A_30_v1.0_B10_DEM.csv",
+        "image": "./png/OPERA_L3_DSWx-HLS_T17TNH_20230829T160831Z_20230831T190839Z_S2A_30_v1.0_B10_DEM.png",
+        "tif": "./tif/OPERA_L3_DSWx-HLS_T17TNH_20230829T160831Z_20230831T190839Z_S2A_30_v1.0_B10_DEM.tif",
         "bounding_box": {
             "southwest": {
-                "lat": 4690200.0,
-                "lng": 499980.0
+                "lat": 42.36407191996271,
+                "lng": -81.00024288390156
             },
             "northeast": {
-                "lat": 4800000.0,
-                "lng": 609780.0
+                "lat": 43.344834816006944,
+                "lng": -79.64555267002488
             }
         }
     },
     {
-        "image": "OPERA_L3_DSWx-HLS_T17TPJ_20230829T160831Z_20230831T193706Z_S2A_30_v1.0_B10_DEM.png",
+        "name": "OPERA_L3_DSWx-HLS_T17TPJ_20230829T160831Z_20230831T193706Z_S2A_30_v1.0_B10_DEM",
+        "csv": "./csv/OPERA_L3_DSWx-HLS_T17TPJ_20230829T160831Z_20230831T193706Z_S2A_30_v1.0_B10_DEM.csv",
+        "image": "./png/OPERA_L3_DSWx-HLS_T17TPJ_20230829T160831Z_20230831T193706Z_S2A_30_v1.0_B10_DEM.png",
+        "tif": "./tif/OPERA_L3_DSWx-HLS_T17TPJ_20230829T160831Z_20230831T193706Z_S2A_30_v1.0_B10_DEM.tif",
         "bounding_box": {
             "southwest": {
-                "lat": 4790220.0,
-                "lng": 600000.0
+                "lat": 43.25815531863286,
+                "lng": -79.7679672999633
             },
             "northeast": {
-                "lat": 4900020.0,
-                "lng": 709800.0
+                "lat": 44.22320973997534,
+                "lng": -78.3733540263
             }
         }
     }

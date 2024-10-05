@@ -5,6 +5,7 @@ import "leaflet-draw/dist/leaflet.draw.css"; // Leaflet Draw CSS
 import DrawControl from "./DrawControl"; // Your DrawControl component
 
 function App() {
+  const [elevationData, setElevationData] = useState([]);
   const [swotData, setSwotData] = useState([]);
   const [overlayVisible, setOverlayVisible] = useState({});
   const [images, setImages] = useState({});
@@ -12,16 +13,36 @@ function App() {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   useEffect(() => {
+    fetch("http://localhost:5001/elevation/get_json")
+      .then((response) => response.json())
+      .then((data) => {
+        setElevationData(data);
+        const visibility = {};
+        data.forEach((item) => {
+          if (item.name) {
+            visibility[item.name] = true;
+            fetchImage("elevation", item.name);
+          }
+        });
+        setOverlayVisible((prev) => ({ ...prev, ...visibility }));
+      })
+      .catch((error) => {
+        console.error("Error fetching elevation data:", error);
+        alert("Error fetching elevation data: " + error.message);
+      });
+
     fetch("http://localhost:5001/swot/get_json")
       .then((response) => response.json())
       .then((data) => {
         setSwotData(data);
         const visibility = {};
         data.forEach((item) => {
-          visibility[item.name] = true;
-          fetchImage(item.name);
+          if (item.name) {
+            visibility[item.name] = true;
+            fetchImage("swot", item.name);
+          }
         });
-        setOverlayVisible(visibility);
+        setOverlayVisible((prev) => ({ ...prev, ...visibility }));
       })
       .catch((error) => {
         console.error("Error fetching SWOT data:", error);
@@ -29,9 +50,18 @@ function App() {
       });
   }, []);
 
-  const fetchImage = (name) => {
-    fetch(`http://localhost:5001/swot/get_image?name=${name}`)
-      .then((response) => response.blob())
+  const fetchImage = (type, name) => {
+    const url = type === "elevation" 
+      ? `http://localhost:5001/elevation/get_image?name=${name}` 
+      : `http://localhost:5001/swot/get_image?name=${name}`;
+    
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Image not found");
+        }
+        return response.blob();
+      })
       .then((blob) => {
         const imageUrl = URL.createObjectURL(blob);
         setImages((prevImages) => ({
@@ -41,7 +71,6 @@ function App() {
       })
       .catch((error) => {
         console.error("Error fetching image:", error);
-        alert("Error fetching image: " + error.message);
       });
   };
 
@@ -57,8 +86,10 @@ function App() {
     const newState = !selectAll;
     setSelectAll(newState);
     const newVisibility = {};
-    swotData.forEach((item) => {
-      newVisibility[item.name] = newState;
+    [...elevationData, ...swotData].forEach((item) => {
+      if (item.name) {
+        newVisibility[item.name] = newState;
+      }
     });
     setOverlayVisible(newVisibility);
   };
@@ -82,8 +113,10 @@ function App() {
       northeast: { lat: north, lng: east },
     };
 
-    const relevantCSVs = swotData
-      .filter((item) => isBoundingBoxIntersecting(drawnBoundingBox, item.bounding_box))
+    const relevantCSVs = [...elevationData, ...swotData]
+      .filter((item) =>
+        isBoundingBoxIntersecting(drawnBoundingBox, item.bounding_box)
+      )
       .map((item) => item.csv);
 
     if (relevantCSVs.length === 0) {
@@ -101,7 +134,7 @@ function App() {
       lat: (south + north) / 2,
     };
 
-    fetch("http://localhost:5001/swot/generate_stl", {
+    fetch("http://localhost:5001/elevation/generate_stl", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -151,16 +184,17 @@ function App() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {swotData.map((item) => {
+        {[...elevationData, ...swotData].map((item, index) => {
           const bounds = [
             [item.bounding_box.southwest.lat, item.bounding_box.southwest.lng],
             [item.bounding_box.northeast.lat, item.bounding_box.northeast.lng],
           ];
           return (
+            item.name &&
             overlayVisible[item.name] &&
             images[item.name] && (
               <ImageOverlay
-                key={item.name}
+                key={`${item.name}-${index}`} // Unique key
                 url={images[item.name]}
                 bounds={bounds}
                 opacity={0.7}
@@ -201,8 +235,8 @@ function App() {
 
         {!isCollapsed && (
           <div>
-            {swotData.map((item) => (
-              <div key={item.name}>
+            {[...elevationData, ...swotData].map((item, index) => (
+              <div key={`${item.name}-${index}`}>
                 <label>
                   <input
                     type="checkbox"
