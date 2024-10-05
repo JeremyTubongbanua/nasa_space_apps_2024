@@ -3,7 +3,8 @@ import numpy as np
 from stl import mesh
 import argparse
 from scipy.spatial import Delaunay
-import matplotlib.pyplot as plt
+from scipy.spatial import ConvexHull
+import sys
 
 def generate_stl(csv_file, west, east, south, north, output_stl):
     # Load CSV data
@@ -17,8 +18,7 @@ def generate_stl(csv_file, west, east, south, north, output_stl):
                 lat = float(row['Latitude'])
                 water_level = float(row['Water_Level'])
             except KeyError as e:
-                print(f"KeyError: {e}. Available keys are: {list(row.keys())}")
-                return
+                raise ValueError(f"KeyError: {e}. Available keys are: {list(row.keys())}")
             
             all_lons.append(lon)
             all_lats.append(lat)
@@ -33,13 +33,9 @@ def generate_stl(csv_file, west, east, south, north, output_stl):
     print(f"Total data points loaded: {len(all_lons)}")
     print(f"Data points after filtering: {len(lons)}")
     
-    # Visualize all data points with bounding box
-    # [Visualization code omitted for brevity]
-    
     # Check if enough data points were loaded
     if len(lons) < 4:
-        print(f"Not enough data points ({len(lons)}) within the specified boundaries to perform triangulation.")
-        return
+        raise ValueError(f"Not enough data points ({len(lons)}) within the specified boundaries to perform triangulation.")
 
     # Normalize the coordinates and water levels
     lons = np.array(lons)
@@ -61,8 +57,7 @@ def generate_stl(csv_file, west, east, south, north, output_stl):
 
     # Check for colinear points
     if np.linalg.matrix_rank(points2D - points2D[0]) < 2:
-        print("Data points are colinear. Cannot perform Delaunay triangulation.")
-        return
+        raise ValueError("Data points are colinear. Cannot perform Delaunay triangulation.")
 
     # Perform Delaunay triangulation
     tri = Delaunay(points2D)
@@ -79,8 +74,6 @@ def generate_stl(csv_file, west, east, south, north, output_stl):
     # --- Add Side Walls and Base to Create Volume ---
 
     # Find the convex hull of the set of points to get the boundary edges
-    from scipy.spatial import ConvexHull
-
     hull = ConvexHull(points2D)
     boundary_indices = hull.vertices
     num_boundary_points = len(boundary_indices)
@@ -135,4 +128,8 @@ if __name__ == "__main__":
     parser.add_argument('--output_stl', type=str, required=True, help='Output STL file name')
 
     args = parser.parse_args()
-    generate_stl(args.csv_file, args.west, args.east, args.south, args.north, args.output_stl)
+    try:
+        generate_stl(args.csv_file, args.west, args.east, args.south, args.north, args.output_stl)
+    except ValueError as e:
+        print(f"Error: {e}")
+        sys.exit(1)
