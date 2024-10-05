@@ -6,56 +6,59 @@ from scipy.spatial import Delaunay, ConvexHull
 import sys
 import os
 
-def load_csv_data(csv_file, west, east, south, north):
-    """Loads and filters data from a single CSV file."""
+def load_csv_data(csv_file, lng, lat):
+    """Loads data from a CSV file and finds the closest points around the provided longitude and latitude."""
     lons, lats, water_levels = [], [], []
-    
+
     with open(csv_file, 'r') as f:
         reader = csv.DictReader(f)
         for row in reader:
             try:
                 lon = float(row['Longitude'])
-                lat = float(row['Latitude'])
+                lat_val = float(row['Latitude'])
                 water_level = float(row['Water_Level'])
             except KeyError as e:
                 raise ValueError(f"KeyError: {e}. Available keys are: {list(row.keys())}")
 
-            # Filter by boundary box
-            if west <= lon <= east and south <= lat <= north:
+            # Calculate the distance to the provided longitude/latitude
+            distance = np.sqrt((lon - lng) ** 2 + (lat_val - lat) ** 2)
+
+            # Append points if they are close (you can adjust this distance threshold as needed)
+            if distance < 0.1:  # You can tune this threshold for your data
                 lons.append(lon)
-                lats.append(lat)
+                lats.append(lat_val)
                 water_levels.append(water_level)
-    
+
     return lons, lats, water_levels
 
-def generate_stl(csv_files, west, east, south, north, output_stl):
-    """Generates a single STL file by merging data from multiple CSV files."""
+def generate_stl(csv_files, lng, lat, output_stl):
+    """Generates a single STL file by merging data from multiple CSV files based on proximity to a point."""
     
     all_lons, all_lats, all_water_levels = [], [], []
-    
+
     # Load and merge data from all CSV files
     for csv_file in csv_files:
-        lons, lats, water_levels = load_csv_data(csv_file, west, east, south, north)
+        lons, lats, water_levels = load_csv_data(csv_file, lng, lat)
         all_lons.extend(lons)
         all_lats.extend(lats)
         all_water_levels.extend(water_levels)
-    
+
     # Print the total number of data points and the number after filtering
     print(f"Total data points loaded from all CSV files: {len(all_lons)}")
-    
+
     # Check if enough data points were loaded
     if len(all_lons) < 4:
-        raise ValueError(f"Not enough data points ({len(all_lons)}) within the specified boundaries to perform triangulation.")
-    
+        raise ValueError(f"Not enough data points ({len(all_lons)}) near the specified location to perform triangulation.")
+
     # Convert lists to NumPy arrays
     all_lons = np.array(all_lons)
     all_lats = np.array(all_lats)
     all_water_levels = np.array(all_water_levels)
-    
+
     # Normalize coordinates and water levels
     x_normalized = (all_lons - np.min(all_lons)) / (np.max(all_lons) - np.min(all_lons)) * 150
     y_normalized = (all_lats - np.min(all_lats)) / (np.max(all_lats) - np.min(all_lats)) * 150
-    
+
     if np.max(all_water_levels) - np.min(all_water_levels) == 0:
         z_normalized = np.zeros_like(all_water_levels)
     else:
@@ -130,15 +133,13 @@ def generate_stl(csv_files, west, east, south, north, output_stl):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate 3D printable STL from CSV')
     parser.add_argument('--csv_files', type=str, nargs='+', required=True, help='List of CSV files')
-    parser.add_argument('--west', type=float, required=True, help='Western boundary longitude')
-    parser.add_argument('--east', type=float, required=True, help='Eastern boundary longitude')
-    parser.add_argument('--south', type=float, required=True, help='Southern boundary latitude')
-    parser.add_argument('--north', type=float, required=True, help='Northern boundary latitude')
+    parser.add_argument('--lng', type=float, required=True, help='Longitude of the point')
+    parser.add_argument('--lat', type=float, required=True, help='Latitude of the point')
     parser.add_argument('--output_stl', type=str, required=True, help='Output STL file name')
 
     args = parser.parse_args()
     try:
-        generate_stl(args.csv_files, args.west, args.east, args.south, args.north, args.output_stl)
+        generate_stl(args.csv_files, args.lng, args.lat, args.output_stl)
     except ValueError as e:
         print(f"Error: {e}")
         sys.exit(1)

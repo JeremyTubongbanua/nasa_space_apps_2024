@@ -70,36 +70,63 @@ function App() {
     setOverlayVisible(newVisibility);
   };
 
+  // Helper function to check if bounding boxes intersect
+  const isBoundingBoxIntersecting = (bbox1, bbox2) => {
+    return !(
+      bbox2.southwest.lat > bbox1.northeast.lat ||
+      bbox2.northeast.lat < bbox1.southwest.lat ||
+      bbox2.southwest.lng > bbox1.northeast.lng ||
+      bbox2.northeast.lng < bbox1.southwest.lng
+    );
+  };
+
   // Handle when a rectangle is drawn
   const handleRectangleDraw = (e) => {
     const bounds = e.layer.getBounds();
     const southwest = bounds.getSouthWest();
     const northeast = bounds.getNorthEast();
 
-    // Add a minimum bounding box size check (adjust values as needed)
-    const minDistance = 0.001; // Set a minimum bounding box size
-
     let west = southwest.lng;
     let east = northeast.lng;
     let south = southwest.lat;
     let north = northeast.lat;
 
-    if (Math.abs(east - west) < minDistance) {
-      east += minDistance; // Expand east to ensure minimum box size
-    }
-    if (Math.abs(north - south) < minDistance) {
-      north += minDistance; // Expand north to ensure minimum box size
-    }
+    // Calculate the center point of the bounding box
+    const longitude = (west + east) / 2;
+    const latitude = (south + north) / 2;
 
-    const data = {
-      west,
-      east,
-      south,
-      north,
+    // Create a bounding box
+    const drawnBoundingBox = {
+      southwest: { lat: south, lng: west },
+      northeast: { lat: north, lng: east },
     };
 
     // Show alert with bounding box data
     alert(`Bounding box coordinates: West: ${west}, East: ${east}, South: ${south}, North: ${north}`);
+
+    // Find the relevant CSVs whose bounding boxes intersect with the drawn bounding box
+    const relevantCSVs = swotData
+      .filter((item) => isBoundingBoxIntersecting(drawnBoundingBox, item.bounding_box))
+      .map((item) => item.csv);
+
+    if (relevantCSVs.length === 0) {
+      alert("No data points found within the selected area.");
+      return;
+    }
+
+    // Prepare data for the POST request, including the center point (longitude, latitude)
+    const data = {
+      csv_files: relevantCSVs,
+      west,
+      east,
+      south,
+      north,
+      lng: longitude,
+      lat: latitude,
+    };
+
+    // Show alert with relevant CSVs
+    alert(`Relevant CSVs: ${relevantCSVs.join(", ")}`);
 
     // Make the POST request to the generate_stl endpoint
     fetch("http://localhost:5001/swot/generate_stl", {

@@ -12,7 +12,7 @@ base_dir = os.path.dirname(os.path.abspath(__file__))
 elevation_dir = os.path.join(base_dir, 'data', 'elevation')
 water_level_dir = os.path.join(base_dir, 'data', 'water-level')
 swot_dir = os.path.join(base_dir, 'data', 'swot')  # Added SWOT directory
-csv_dir = os.path.join(base_dir, 'csv')
+csv_dir = os.path.join(swot_dir, 'csv')
 
 # Load JSON locations
 def load_locations(directory):
@@ -44,12 +44,12 @@ def get_image_path(directory, name):
 def serve_image(directory, name):
     if not name:
         return abort(400, description="Image name is required")
-    
+
     image_path = get_image_path(directory, name)
     if image_path:
         print(f"Serving image: {image_path}")
         return send_file(image_path, mimetype='image/png')
-    
+
     print(f"Error: Image {name} not found in {directory}")
     return abort(404, description="Image not found")
 
@@ -63,11 +63,11 @@ def serve_json(locations):
 def get_coordinates(locations, name):
     if not name:
         return abort(400, description="Image name is required")
-    
+
     for loc in locations:
         if loc['image'].endswith(f"{name}.png"):
             return jsonify(loc['bounding_box'])
-    
+
     return abort(404, description="Coordinates not found for the specified image")
 
 # Elevation endpoints
@@ -115,35 +115,92 @@ def get_swot_coordinates():
     name = request.args.get('name')
     return get_coordinates(swot_locations, name)
 
-# Endpoint to generate STL from bounding box
+# Function to check if two bounding boxes intersect
+def bounding_boxes_intersect(bbox1, bbox2):
+    return not (
+        bbox1['north'] < bbox2['southwest']['lat'] or
+        bbox1['south'] > bbox2['northeast']['lat'] or
+        bbox1['east'] < bbox2['southwest']['lng'] or
+        bbox1['west'] > bbox2['northeast']['lng']
+    )
+
+# Function to check if a point is inside a bounding box
+def is_point_in_bbox(lng, lat, bbox):
+    return (
+        bbox['southwest']['lng'] <= lng <= bbox['northeast']['lng'] and
+        bbox['southwest']['lat'] <= lat <= bbox['northeast']['lat']
+    )
+
+import logging
+
+# Initialize the logger
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
 @app.route('/swot/generate_stl', methods=['POST'])
 def generate_stl():
     data = request.json
-    west = data.get('west')
-    east = data.get('east')
-    south = data.get('south')
-    north = data.get('north')
 
-    if not (west and east and south and north):
-        return abort(400, description="Bounding box parameters are required (west, east, south, north)")
-
-    csv_file = os.path.join(csv_dir, 'swot_data.csv')  # Path to your CSV file
-    output_stl = os.path.join(csv_dir, 'generated_terrain.stl')  # Output STL file
-
-    # Run the STL generation script
-    command = ['python3', os.path.join(csv_dir, 'generate_stl.py'), '--csv_file', csv_file, '--west', str(west), '--east', str(east),
-               '--south', str(south), '--north', str(north), '--output_stl', output_stl]
+    # Log the incoming request data
+    logger.info(f"Received POST request for STL generation with data: {data}")
 
     try:
+        longitude = float(data.get('lng'))
+        latitude = float(data.get('lat'))
+        logger.info(f"Longitude: {longitude}, Latitude: {latitude}")
+    except (TypeError, ValueError) as e:
+        logger.error(f"Invalid longitude/latitude provided: {e}")
+        return abort(400, description="Longitude and latitude are required and must be valid numbers (lng, lat)")
+
+    if not (longitude and latitude):
+        logger.warning("Longitude and latitude are missing from the request")
+        return abort(400, description="Longitude and latitude are required (lng, lat)")
+
+    # Check if the point is within any of the bounding boxes
+    relevant_location = None
+    for location in swot_locations:
+        bbox = location['bounding_box']
+        if is_point_in_bbox(longitude, latitude, bbox):
+            relevant_location = location
+            logger.info(f"Found relevant location: {relevant_location['name']}")
+            break
+
+    if not relevant_location:
+        logger.warning(f"No relevant location found for longitude: {longitude}, latitude: {latitude}")
+        return abort(404, description="No data available for the specified location.")
+
+    csv_file_path = os.path.join(swot_dir, relevant_location['csv'])
+
+    if not os.path.exists(csv_file_path):
+        logger.error(f"CSV file not found for location: {relevant_location['name']} at path: {csv_file_path}")
+        return abort(404, description="CSV file not found for the specified location.")
+
+    output_stl = os.path.join(csv_dir, 'generated_terrain.stl')  # Output STL file
+
+    # Prepare command to run generate_stl.py with the necessary arguments
+    command = [
+        'python3', os.path.join(csv_dir, 'generate_stl.py'),
+        '--csv_files', csv_file_path,
+        '--lng', str(longitude),
+        '--lat', str(latitude),
+        '--output_stl', output_stl
+    ]
+
+    try:
+        logger.info(f"Running command: {' '.join(command)}")
         result = subprocess.run(command, check=True, capture_output=True, text=True)
         if result.returncode == 0:
-            print(f"STL file generated: {output_stl}")
+            logger.info(f"STL file successfully generated: {output_stl}")
             return send_file(output_stl, as_attachment=True, download_name='terrain.stl', mimetype='application/sla')
         else:
+            logger.error(f"STL generation failed with error: {result.stderr}")
             return abort(500, description=f"Error generating STL: {result.stderr}")
     except subprocess.CalledProcessError as e:
-        print(f"Error generating STL: {e}")
-        return abort(500, description=f"STL generation failed: {e}")
+        logger.error(f"STL generation process failed: {e.stderr}")
+        return abort(500, description=f"STL generation failed: {e.stderr}")
+
+
+
 
 if __name__ == '__main__':
     # Enable debugging, auto-restart the server if code changes
