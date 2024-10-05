@@ -26,9 +26,10 @@ image_locations = []
 # Iterate through each .nc file in the nc directory
 for filename in os.listdir(nc_dir):
     if filename.endswith('.nc'):
+        name = filename.replace('.nc', '')
         nc_path = os.path.join(nc_dir, filename)
-        png_path = os.path.join(png_dir, filename.replace('.nc', '.png'))
-        csv_path = os.path.join(csv_dir, filename.replace('.nc', '.csv'))
+        png_path = os.path.join(png_dir, f"{name}.png")
+        csv_path = os.path.join(csv_dir, f"{name}.csv")
 
         # Open the NetCDF file
         nc_file = Dataset(nc_path, 'r')
@@ -59,7 +60,11 @@ for filename in os.listdir(nc_dir):
                 for i in range(longitudes_downsampled.shape[0]):
                     for j in range(latitudes_downsampled.shape[1]):
                         if not water_surface_elevation_downsampled.mask[i, j]:  # Only write non-masked data
-                            csvwriter.writerow([longitudes_downsampled[i, j], latitudes_downsampled[i, j], water_surface_elevation_downsampled[i, j]])
+                            csvwriter.writerow([
+                                longitudes_downsampled[i, j],
+                                latitudes_downsampled[i, j],
+                                water_surface_elevation_downsampled[i, j]
+                            ])
 
             # Set up the figure without axes (good for map overlay)
             fig, ax = plt.subplots(figsize=(10, 6))
@@ -67,7 +72,12 @@ for filename in os.listdir(nc_dir):
             # Plot the data as an image with longitude and latitude bounds (extent)
             im = ax.imshow(
                 water_surface_elevation_downsampled,
-                extent=(np.min(longitudes_downsampled), np.max(longitudes_downsampled), np.min(latitudes_downsampled), np.max(latitudes_downsampled)),
+                extent=(
+                    np.min(longitudes_downsampled),
+                    np.max(longitudes_downsampled),
+                    np.min(latitudes_downsampled),
+                    np.max(latitudes_downsampled)
+                ),
                 cmap='viridis',
                 origin='lower'
             )
@@ -81,15 +91,18 @@ for filename in os.listdir(nc_dir):
 
             # Create a dictionary for the image and bounding box info
             image_info = {
-                "image": filename.replace('.nc', '.png'),
+                "name": name,
+                "csv": f"./csv/{name}.csv",
+                "image": f"./png/{name}.png",
+                "nc": f"./nc/{name}.nc",
                 "bounding_box": {
                     "southwest": {
-                        "lat": np.min(latitudes_downsampled),
-                        "lng": np.min(longitudes_downsampled)
+                        "lat": float(np.min(latitudes_downsampled)),
+                        "lng": float(np.min(longitudes_downsampled))
                     },
                     "northeast": {
-                        "lat": np.max(latitudes_downsampled),
-                        "lng": np.max(longitudes_downsampled)
+                        "lat": float(np.max(latitudes_downsampled)),
+                        "lng": float(np.max(longitudes_downsampled))
                     }
                 }
             }

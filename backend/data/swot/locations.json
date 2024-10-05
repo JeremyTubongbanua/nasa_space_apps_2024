@@ -1,6 +1,9 @@
 [
     {
-        "image": "SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_021_076_039F_20240913T050635_20240913T050656_PIC0_01.png",
+        "name": "SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_021_076_039F_20240913T050635_20240913T050656_PIC0_01",
+        "csv": "./csv/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_021_076_039F_20240913T050635_20240913T050656_PIC0_01.csv",
+        "image": "./png/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_021_076_039F_20240913T050635_20240913T050656_PIC0_01.png",
+        "nc": "./nc/SWOT_L2_HR_Raster_100m_UTM17T_N_x_x_x_021_076_039F_20240913T050635_20240913T050656_PIC0_01.nc",
         "bounding_box": {
             "southwest": {
                 "lat": 43.09283533944739,

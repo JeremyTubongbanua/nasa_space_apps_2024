@@ -8,6 +8,7 @@ app = Flask(__name__)
 base_dir = os.path.dirname(os.path.abspath(__file__))
 elevation_dir = os.path.join(base_dir, 'data', 'elevation')
 water_level_dir = os.path.join(base_dir, 'data', 'water-level')
+swot_dir = os.path.join(base_dir, 'data', 'swot')  # Added SWOT directory
 
 # Load JSON locations
 def load_locations(directory):
@@ -17,68 +18,89 @@ def load_locations(directory):
             return json.load(file)
     return []
 
-# Load both elevation and water-level locations
+# Load elevation, water-level, and swot locations
 elevation_locations = load_locations(elevation_dir)
 water_level_locations = load_locations(water_level_dir)
+swot_locations = load_locations(swot_dir)  # Load SWOT locations
 
 # Helper function to get image path
 def get_image_path(directory, name):
-    png_path = os.path.join(directory, 'png', f"{name}.png")
+    if not name.endswith('.png'):
+        name = f"{name}.png"
+    
+    png_path = os.path.join(directory, 'png', name)
+    print(f"Looking for image at: {png_path}")  # Debug print
     if os.path.exists(png_path):
         return png_path
     return None
 
-# Endpoint to get water level image by name
-@app.route('/water-level/get_image', methods=['GET'])
-def get_water_level_image():
-    name = request.args.get('name')
+
+# Common function to serve images based on directory and name
+def serve_image(directory, name):
     if not name:
         return abort(400, description="Image name is required")
-
-    image_path = get_image_path(water_level_dir, name)
+    image_path = get_image_path(directory, name)
     if image_path:
         return send_file(image_path, mimetype='image/png')
     return abort(404, description="Image not found")
 
-# Endpoint to get elevation image by name
+# Common function to serve JSON data (bounding boxes)
+def serve_json(locations):
+    return jsonify(locations)
+
+# Common function to get longitude and latitude from image name
+def get_coordinates(locations, name):
+    if not name:
+        return abort(400, description="Image name is required")
+    for loc in locations:
+        if loc['image'] == f"{name}.png":
+            return jsonify(loc['bounding_box'])
+    return abort(404, description="Coordinates not found")
+
+# Elevation endpoints
 @app.route('/elevation/get_image', methods=['GET'])
 def get_elevation_image():
     name = request.args.get('name')
-    if not name:
-        return abort(400, description="Image name is required")
+    return serve_image(elevation_dir, name)
 
-    image_path = get_image_path(elevation_dir, name)
-    if image_path:
-        return send_file(image_path, mimetype='image/png')
-    return abort(404, description="Image not found")
-
-# Endpoint to get water level JSON bounding box data
-@app.route('/water-level/get_json', methods=['GET'])
-def get_water_level_json():
-    return jsonify(water_level_locations)
-
-# Endpoint to get elevation JSON bounding box data
 @app.route('/elevation/get_json', methods=['GET'])
 def get_elevation_json():
-    return jsonify(elevation_locations)
+    return serve_json(elevation_locations)
 
-# Endpoint to get water level longitude/latitude
-@app.route('/water-level/get_longitude_latitude', methods=['GET'])
-def get_water_level_coordinates():
-    name = request.args.get('name')
-    for loc in water_level_locations:
-        if loc['image'] == f"{name}.png":
-            return jsonify(loc['bounding_box'])
-    return abort(404, description="Coordinates not found")
-
-# Endpoint to get elevation longitude/latitude
 @app.route('/elevation/get_longitude_latitude', methods=['GET'])
 def get_elevation_coordinates():
     name = request.args.get('name')
-    for loc in elevation_locations:
-        if loc['image'] == f"{name}.png":
-            return jsonify(loc['bounding_box'])
-    return abort(404, description="Coordinates not found")
+    return get_coordinates(elevation_locations, name)
+
+# Water-level endpoints
+@app.route('/water-level/get_image', methods=['GET'])
+def get_water_level_image():
+    name = request.args.get('name')
+    return serve_image(water_level_dir, name)
+
+@app.route('/water-level/get_json', methods=['GET'])
+def get_water_level_json():
+    return serve_json(water_level_locations)
+
+@app.route('/water-level/get_longitude_latitude', methods=['GET'])
+def get_water_level_coordinates():
+    name = request.args.get('name')
+    return get_coordinates(water_level_locations, name)
+
+# SWOT endpoints
+@app.route('/swot/get_image', methods=['GET'])
+def get_swot_image():
+    name = request.args.get('name')
+    return serve_image(swot_dir, name)
+
+@app.route('/swot/get_json', methods=['GET'])
+def get_swot_json():
+    return serve_json(swot_locations)
+
+@app.route('/swot/get_longitude_latitude', methods=['GET'])
+def get_swot_coordinates():
+    name = request.args.get('name')
+    return get_coordinates(swot_locations, name)
 
 if __name__ == '__main__':
     app.run(port=5001)
