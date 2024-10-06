@@ -42,7 +42,7 @@ function Home() {
   }, [hovering, images.length]);
 
   return (
-    <div className="relative flex h-full flex-col items-center justify-center bg-cream bg-mainbg bg-contain bg-left-bottom bg-no-repeat md:flex-row">
+    <div className="relative flex h-full flex-col items-center justify-center overflow-clip bg-cream bg-mainbg bg-contain bg-left-bottom bg-no-repeat md:flex-row">
       {/* Blue Box */}
       <div className="z-10 w-[80%] rounded-[5vw] border-[3px] border-black bg-lightblue p-10 py-20 text-center md:w-[40%] md:py-40">
         <div className="flex flex-col justify-start gap-7">
