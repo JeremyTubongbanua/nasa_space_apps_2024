@@ -4,6 +4,8 @@ import "leaflet/dist/leaflet.css"; // Leaflet CSS
 import "leaflet-draw/dist/leaflet.draw.css"; // Leaflet Draw CSS
 import DrawControl from "./DrawControl"; // Your DrawControl component
 
+const BASE_URL = "http://159.203.60.247:5001";
+
 function App() {
   const [elevationData, setElevationData] = useState([]);
   const [swotData, setSwotData] = useState([]);
@@ -15,7 +17,7 @@ function App() {
 
   useEffect(() => {
     // Fetch elevation data
-    fetch("http://localhost:5001/elevation/get_json")
+    fetch(`${BASE_URL}/elevation/get_json`)
       .then((response) => response.json())
       .then((data) => {
         setElevationData(data);
@@ -34,7 +36,7 @@ function App() {
       });
 
     // Fetch SWOT data
-    fetch("http://localhost:5001/swot/get_json")
+    fetch(`${BASE_URL}/swot/get_json`)
       .then((response) => response.json())
       .then((data) => {
         setSwotData(data);
@@ -56,8 +58,8 @@ function App() {
   const fetchImage = (type, name) => {
     const url =
       type === "elevation"
-        ? `http://localhost:5001/elevation/get_image?name=${name}`
-        : `http://localhost:5001/swot/get_image?name=${name}`;
+        ? `${BASE_URL}/elevation/get_image?name=${name}`
+        : `${BASE_URL}/swot/get_image?name=${name}`;
 
     fetch(url)
       .then((response) => {
@@ -167,8 +169,8 @@ function App() {
 
     const url =
       type === "elevation"
-        ? "http://localhost:5001/elevation/generate_stl"
-        : "http://localhost:5001/swot/generate_stl";
+        ? `${BASE_URL}/elevation/generate_stl`
+        : `${BASE_URL}/swot/generate_stl`;
 
     fetch(url, {
       method: "POST",
