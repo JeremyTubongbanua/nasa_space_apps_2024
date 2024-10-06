@@ -1,4 +1,46 @@
+import { useState, useEffect } from 'react';
+
 function Home() {
+  const [hovering, setHovering] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const images = [
+    "/public/animation/Property 1=Variant1.svg",
+    "/public/animation/Property 1=Variant2.svg",
+    "/public/animation/Property 1=Variant3.svg",
+    "/public/animation/Property 1=Variant4.svg",
+    "/public/animation/Property 1=Variant5.svg",
+    "/public/animation/Property 1=Variant6.svg",
+    "/public/animation/Property 1=Variant7.svg",
+    "/public/animation/Property 1=Variant8.svg",
+    "/public/animation/Property 1=Variant9.svg",
+    "/public/animation/Property 1=Variant10.svg",
+    "/public/animation/Property 1=Variant11.svg",
+    "/public/animation/Property 1=Variant12.svg",
+    "/public/animation/Property 1=Variant13.svg",
+    "/public/animation/Property 1=Variant14.svg",
+    "/public/animation/Property 1=Variant15.svg",
+    "/public/animation/Property 1=Variant16.svg",
+    "/public/animation/Property 1=Variant17.svg",
+    "/public/animation/Property 1=Variant18.svg",
+    "/public/animation/Property 1=Variant19.svg",
+    "/public/animation/Property 1=Variant20.svg",
+    "/public/animation/Property 1=Variant21.svg",
+    "/public/animation/Property 1=Variant22.svg",
+  ];
+
+  useEffect(() => {
+    let interval;
+    if (hovering) {
+      interval = setInterval(() => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+      }, 200); // Adjust the speed if needed
+    } else {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval); // Cleanup the interval on unmount
+  }, [hovering, images.length]);
+
   return (
     <div className="bg-cream bg-mainbg relative flex h-full flex-col items-center justify-center bg-contain bg-left-bottom bg-no-repeat md:flex-row">
       {/* Blue Box */}
@@ -27,10 +69,13 @@ function Home() {
         className="absolute left-[15%] top-[20%] z-0 scale-50 brightness-75 md:left-[23%] md:top-[15%] md:scale-100"
       />
 
+      {/* Replace satellite with the animation */}
       <img
-        src="/public/Satellite Vector.png"
-        alt="satelite"
+        src={images[currentImageIndex]}
+        alt="animated satellite"
         className="absolute left-[15%] top-[20%] z-10 scale-50 brightness-75 md:left-[25%] md:top-[15%] md:scale-100"
+        onMouseEnter={() => setHovering(true)}
+        onMouseLeave={() => setHovering(false)}
       />
     </div>
   );
