@@ -2,19 +2,21 @@ import { Link } from "react-router-dom";
 
 function Map() {
   return (
-    <div className="bg-mapbg flex flex-col gap-10 bg-cream bg-contain bg-repeat px-48">
+    <div className="bg-mapbg flex flex-col gap-10 bg-cream bg-contain bg-repeat px-6 md:px-16 lg:px-48">
       <div>
-        <h1 className="mt-20 text-center text-6xl font-semibold">Map</h1>
-        <div className="mt-10 flex flex-col justify-center gap-4 rounded-[60px] bg-lightblue p-12">
-          <p className="text-xl font-semibold">
+        <h1 className="mt-10 text-center text-4xl font-semibold md:mt-20 md:text-6xl">
+          Map
+        </h1>
+        <div className="mt-6 flex flex-col justify-center gap-4 rounded-[20px] bg-lightblue p-8 md:mt-10 md:rounded-[60px] md:p-12">
+          <p className="text-lg font-semibold md:text-xl">
             Hello! And Welcome to Mapping X.
           </p>
-          <p className="">
+          <p className="text-sm md:text-base">
             Mapping X is a fun and interactive tool that let's you generate 3D
             mesh .STL files from NASA Satellite Earthview data.
           </p>
-          <p className="">Mapping X supports</p>
-          <ol>
+          <p className="text-sm md:text-base">Mapping X supports</p>
+          <ol className="text-sm md:text-base">
             <li>
               1. Digital Elevation Model (DEM) data (taken from the Landsat
               Sentinel-2 from the{" "}
@@ -41,7 +43,7 @@ function Map() {
               dataset
             </li>
           </ol>
-          <p>
+          <p className="text-sm md:text-base">
             Currently, since satellite data is VERY large in storage size, it
             was very hard to get a lot of images. So right now, we only support
             datasets that are in the South Ontario area, and we currenetly do
@@ -50,36 +52,40 @@ function Map() {
             resolution down.{" "}
           </p>
 
-          <p className="flex flex-col items-center">
+          <p className="flex flex-col items-center text-sm md:text-base">
             You will have the option of overlaying the map with either DEM data
             (Digital Elevation Model) or SWOT data (Surface Water and Ocean
             Topography). You can also overlay both DEM and SWOT data.
           </p>
 
           <div className="flex flex-col items-center justify-center gap-4">
-            <h3 className="text-xl font-semibold">
+            <h3 className="text-lg font-semibold md:text-xl">
               Overlay Samples of DET and SWOT Data
             </h3>
-            <div className="flex items-center justify-center gap-10">
+            <div className="flex flex-col items-center justify-center gap-10 md:flex-row">
               <img
                 src="https://i.imgur.com/nLlCS8E.png"
                 alt="SWOT"
-                className="max-h-96 rounded-lg"
+                className="max-h-64 rounded-lg md:max-h-96"
               />
               <img
                 src="https://i.imgur.com/hTwP5hK.png"
                 alt="DEM"
-                className="max-h-96 rounded-lg"
+                className="max-h-64 rounded-lg md:max-h-96"
               />
             </div>
           </div>
-          <p>Here are some of the sample .STL files that you can create</p>
+          <p className="text-sm md:text-base">
+            Here are some of the sample .STL files that you can create
+          </p>
         </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-4">
-        <div className="flex w-full flex-col items-center gap-2 overflow-hidden rounded-[60px] bg-gray-300 p-12 py-4">
-          <strong className="text-3xl uppercase">Instructions</strong>
-          <p>
+        <div className="flex w-full flex-col items-center gap-2 overflow-hidden rounded-[20px] bg-gray-300 p-6 py-4 md:rounded-[60px] md:p-12">
+          <strong className="text-xl uppercase md:text-3xl">
+            Instructions
+          </strong>
+          <p className="text-sm md:text-base">
             1. Click on the rectangle tool on the top left of your screen to
             select the Rectangle tool. <br></br>2. Click and drag to draw a
             rectangle on the map. <br></br>3. If you selected a region with
@@ -89,20 +95,23 @@ function Map() {
           <img
             src="https://i.imgur.com/C4xnuXY.png"
             alt="Rectangle Tool Instructions"
-            className="rounded-lg"
+            className="max-h-64 rounded-lg md:max-h-96"
           />
-          <p>
+          <p className="text-sm md:text-base">
             Upon drawing a rectangle, this will generate a 3D mesh .STL file. An
-            .STL may not always be geneated for maybe a couple reasons: the
+            .STL may not always be generated for maybe a couple reasons: the
             region you selected may not have data, or may only have data of one
             of the two (DEM or SWOT).
           </p>
-          <img src="https://i.imgur.com/o4Ou5yr.png" className="rounded-lg" />
+          <img
+            src="https://i.imgur.com/o4Ou5yr.png"
+            className="max-h-64 rounded-lg md:max-h-96"
+          />
         </div>
 
         <Link
           to={"/mapapp"}
-          className="w-2/4 rounded-lg bg-orange-300 p-5 text-center text-2xl font-semibold uppercase"
+          className="w-full rounded-lg bg-orange-300 p-5 text-center text-lg font-semibold uppercase md:w-2/4 md:text-2xl"
         >
           GO TO MAP
         </Link>
