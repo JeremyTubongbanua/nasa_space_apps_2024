@@ -4,8 +4,23 @@ export default {
   theme: {
     fontFamily: {
       sans: ["Inter", "sans-serif"],
+      serif: [
+        "ui-serif",
+        "Georgia",
+        "Cambria",
+        "Times New Roman",
+        "Times",
+        "serif",
+      ],
     },
     extend: {
+      backgroundImage: {
+        mainbg: "url('/public/Background.png')",
+      },
+      backgroundSize: {
+        "75%": "75%",
+        "50%": "50%",
+      },
       colors: {
         choco: "#4A051c",
         vistablue: "#7EA3cc",
