@@ -60,7 +60,7 @@ function Map() {
 
           <div className="flex flex-col items-center justify-center gap-4">
             <h3 className="text-lg font-semibold md:text-xl">
-              Overlay Samples of SWOT and DEM Data
+              Overlay Samples of DEM and SWOT Data
             </h3>
             <div className="flex flex-col items-center justify-center gap-10 md:flex-row">
               <img
