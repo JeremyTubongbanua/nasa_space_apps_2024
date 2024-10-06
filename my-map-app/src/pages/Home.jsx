@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 function Home() {
   const [hovering, setHovering] = useState(false);
@@ -73,7 +73,7 @@ function Home() {
       <img
         src={images[currentImageIndex]}
         alt="animated satellite"
-        className="absolute left-[15%] top-[20%] z-10 scale-50 brightness-75 md:left-[25%] md:top-[15%] md:scale-100"
+        className="absolute right-0 top-0 z-10 scale-50 brightness-75 md:-right-[20%] md:top-[10%] md:scale-100"
         onMouseEnter={() => setHovering(true)}
         onMouseLeave={() => setHovering(false)}
       />
