@@ -16,6 +16,7 @@ export default {
     extend: {
       backgroundImage: {
         mainbg: "url('/public/Background.png')",
+        aboutbg: "url('/public/Lines.svg')",
       },
       backgroundSize: {
         "75%": "75%",
