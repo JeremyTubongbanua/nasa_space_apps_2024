@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import "./Map.css";
 
 function Map() {
   return (
