@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 function About() {
   const [hovering, setHovering] = useState(false);
@@ -42,7 +42,7 @@ function About() {
 
   return (
     <div
-      className="bg-cream bg-aboutbg grid grid-cols-2 bg-contain bg-no-repeat px-48"
+      className="grid grid-cols-2 bg-cream bg-aboutbg bg-contain bg-no-repeat px-48"
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
     >
@@ -51,14 +51,10 @@ function About() {
         alt="Earth Animation"
         className="scale-125 place-self-center"
       />
-      <img
-        src="/public/Satellite Vector.png"
-        alt="Satellite Vector"
-        className="absolute bottom-10 left-10 rotate-90 scale-150"
-      />
+
       <div>
         <h1 className="mt-24 text-center text-6xl font-semibold">About Us</h1>
-        <div className="bg-lightblue mt-10 h-3/5 rounded-3xl p-10">
+        <div className="mt-10 h-3/5 rounded-3xl bg-lightblue p-10">
           description goes here
         </div>
       </div>

@@ -1,8 +1,8 @@
 function Home() {
   return (
-    <div className="bg-cream bg-mainbg relative flex h-full flex-col items-center justify-center bg-contain bg-left-bottom bg-no-repeat md:flex-row">
+    <div className="relative flex h-full flex-col items-center justify-center bg-cream bg-mainbg bg-contain bg-left-bottom bg-no-repeat md:flex-row">
       {/* Blue Box */}
-      <div className="bg-lightblue z-10 w-[80%] rounded-[5vw] border-[3px] border-black p-10 py-20 text-center md:w-[40%] md:py-40">
+      <div className="z-10 w-[80%] rounded-[5vw] border-[3px] border-black bg-lightblue p-10 py-20 text-center md:w-[40%] md:py-40">
         <div className="flex flex-col justify-start gap-7">
           <h1 className="font-serif text-5xl font-extralight uppercase tracking-tight text-white md:text-8xl">
             mapping <span className="text-black">x</span>
@@ -17,7 +17,7 @@ function Home() {
       <img
         src="/public/Cloud Vector.png"
         alt="cloud"
-        className="absolute bottom-[20%] right-[10%] z-20 scale-50 brightness-95 md:right-[25%] md:scale-125"
+        className="absolute bottom-[10%] right-[10%] z-20 scale-50 brightness-95 md:right-[25%] md:scale-125"
       />
 
       {/* Cloud 2 */}
