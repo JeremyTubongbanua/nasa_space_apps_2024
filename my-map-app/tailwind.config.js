@@ -12,6 +12,7 @@ export default {
         copper: "#a8763e",
         indigodye: "#0c4767",
         lightblue: "#90c2e7",
+        cream: "#f7f2ec",
       },
     },
   },
