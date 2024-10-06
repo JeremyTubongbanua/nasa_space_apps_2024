@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function Map() {
   return (
-    <div className="flex flex-col gap-10 bg-cream bg-cover px-48">
+    <div className="bg-mapbg flex flex-col gap-10 bg-cream bg-contain bg-repeat px-48">
       <div>
         <h1 className="mt-20 text-center text-6xl font-semibold">Map</h1>
         <div className="mt-10 flex flex-col justify-center gap-4 rounded-[60px] bg-lightblue p-12">

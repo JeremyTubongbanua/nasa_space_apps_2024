@@ -17,6 +17,7 @@ export default {
       backgroundImage: {
         mainbg: "url('/public/Background.png')",
         aboutbg: "url('/public/Lines.svg')",
+        mapbg: "url('/public/MAP_Page.png')",
       },
       backgroundSize: {
         "75%": "75%",
