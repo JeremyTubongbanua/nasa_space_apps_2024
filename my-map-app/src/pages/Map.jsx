@@ -111,7 +111,7 @@ function Map() {
 
         <Link
           to={"/mapapp"}
-          className="w-full rounded-lg bg-orange-300 p-5 text-center text-lg font-semibold uppercase md:w-2/4 md:text-2xl"
+          className="mb-10 w-full rounded-lg bg-orange-300 p-5 text-center text-lg font-semibold uppercase md:w-2/4 md:text-2xl"
         >
           GO TO MAP
         </Link>
