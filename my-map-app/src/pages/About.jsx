@@ -62,8 +62,9 @@ function About() {
           </p>
           Figma Prototyping:
           <img src="https://i.imgur.com/xLHJ1nM.png" alt="figma prototyping" />
-          How It Works:
-          <img src="https://i.imgur.com/N8jt1sZ.png" alt="how it works" />
+
+        How It Works:
+          <img src="https://i.imgur.com/EGqX8QF.png" alt="how it works" />
         </div>
       </div>
     </div>
