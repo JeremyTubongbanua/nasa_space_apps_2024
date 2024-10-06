@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function Map() {
   return (
-    <div className="bg-mapbg flex flex-col gap-10 bg-cream bg-contain bg-repeat px-6 md:px-16 lg:px-48">
+    <div className="flex flex-col gap-10 bg-cream bg-mapbg bg-contain bg-repeat px-6 md:px-16 lg:px-48">
       <div>
         <h1 className="mt-10 text-center text-4xl font-semibold md:mt-20 md:text-6xl">
           Map
@@ -74,10 +74,22 @@ function Map() {
                 className="max-h-64 rounded-lg md:max-h-96"
               />
             </div>
+            <p className="text-sm md:text-base">
+              Here are some of the sample .STL files that you can create. (Left is terrain elevation and right is SWOT water level)
+            </p>
+            <div className="flex flex-col items-center justify-center gap-10 md:flex-row">
+              <img
+                className="max-h-64 rounded-lg md:max-h-96"
+                src="https://i.imgur.com/CB1rZ7V.png"
+                alt="STL"
+              />
+              <img
+                className="max-h-64 rounded-lg md:max-h-96"
+                src="https://i.imgur.com/i9W1VLW.png"
+                alt=""
+              />
+            </div>
           </div>
-          <p className="text-sm md:text-base">
-            Here are some of the sample .STL files that you can create
-          </p>
         </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-4">
