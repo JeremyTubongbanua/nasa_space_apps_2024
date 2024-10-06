@@ -1,0 +1,16 @@
+.earth-animation {
+    transition: transform 0.5s ease;
+  }
+  
+  .earth-animation:hover {
+    transform: scale(1.3);
+  }
+  
+  .satellite-animation {
+    transition: transform 0.5s ease, rotate 2s linear;
+  }
+  
+  .satellite-animation:hover {
+    transform: rotate(360deg) scale(1.6);
+  }
+  
