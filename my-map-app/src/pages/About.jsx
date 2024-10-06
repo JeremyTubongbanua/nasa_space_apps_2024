@@ -76,6 +76,18 @@ function About() {
               className="rounded-lg"
             />
           </div>
+          <div>
+            Technologies Used
+            <img src="https://i.imgur.com/5ybQ913.png" alt="" />
+          </div>
+          <div>
+            GIF Animation of some Elevation Terrain and SWOT Water Level STLs
+            <img
+              src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnY2dXljaXFjeXlseGhuODdqdzBqM2tvcmFpaG03eTNndGw4MmM1aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/uA2GZlWViQhSv3UhGa/giphy.gif"
+              alt="fun animation"
+              className="rounded-lg"
+            />
+          </div>
         </div>
       </div>
     </div>
