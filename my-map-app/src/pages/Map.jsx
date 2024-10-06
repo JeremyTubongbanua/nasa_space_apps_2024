@@ -2,18 +2,18 @@ import { Link } from "react-router-dom";
 
 function Map() {
   return (
-    <div className="grid max-h-full grid-cols-2 gap-32 bg-cream bg-cover px-48">
+    <div className="flex flex-col gap-10 bg-cream bg-cover px-48">
       <div>
-        <h1 className="mt-32 text-center text-6xl font-semibold">Map</h1>
-        <div className="mt-10 flex h-3/5 flex-col justify-center rounded-[60px] bg-lightblue p-12 py-4">
+        <h1 className="mt-20 text-center text-6xl font-semibold">Map</h1>
+        <div className="mt-10 flex flex-col justify-center gap-4 rounded-[60px] bg-lightblue p-12">
           <p className="text-xl font-semibold">
             Hello! And Welcome to Mapping X.
           </p>
-          <p className="mt-10">
+          <p className="">
             Mapping X is a fun and interactive tool that let's you generate 3D
             mesh .STL files from NASA Satellite Earthview data.
           </p>
-          <p className="mt-10">Mapping X supports</p>
+          <p className="">Mapping X supports</p>
           <ol>
             <li>
               1. Digital Elevation Model (DEM) data (taken from the Landsat
@@ -49,20 +49,34 @@ function Map() {
             that data we were able to hold on our server even when scaling the
             resolution down.{" "}
           </p>
-          <br />
-          <p>
+
+          <p className="flex flex-col items-center">
             You will have the option of overlaying the map with either DEM data
             (Digital Elevation Model) or SWOT data (Surface Water and Ocean
-            Topography). You can also overlay both DEM and SWOT data. DEM Data
-            overlay sample
-            <img src="https://i.imgur.com/nLlCS8E.png" alt="SWOT" />
-            SWOT Data overlay sample
-            <img src="https://i.imgur.com/hTwP5hK.png" alt="DEM" />
+            Topography). You can also overlay both DEM and SWOT data.
           </p>
+
+          <div className="flex flex-col items-center justify-center gap-4">
+            <h3 className="text-xl font-semibold">
+              Overlay Samples of DET and SWOT Data
+            </h3>
+            <div className="flex items-center justify-center gap-10">
+              <img
+                src="https://i.imgur.com/nLlCS8E.png"
+                alt="SWOT"
+                className="max-h-96 rounded-lg"
+              />
+              <img
+                src="https://i.imgur.com/hTwP5hK.png"
+                alt="DEM"
+                className="max-h-96 rounded-lg"
+              />
+            </div>
+          </div>
           <p>Here are some of the sample .STL files that you can create</p>
         </div>
       </div>
-      <div className="mt-24 flex flex-col items-center justify-center gap-4">
+      <div className="flex flex-col items-center justify-center gap-4">
         <div className="flex w-full flex-col items-center gap-2 overflow-hidden rounded-[60px] bg-gray-300 p-12 py-4">
           <strong className="text-3xl uppercase">Instructions</strong>
           <p>
