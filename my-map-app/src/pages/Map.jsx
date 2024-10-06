@@ -60,22 +60,22 @@ function Map() {
 
           <div className="flex flex-col items-center justify-center gap-4">
             <h3 className="text-lg font-semibold md:text-xl">
-              Overlay Samples of DET and SWOT Data
+              Overlay Samples of SWOT and DEM Data
             </h3>
             <div className="flex flex-col items-center justify-center gap-10 md:flex-row">
-              <img
-                src="https://i.imgur.com/nLlCS8E.png"
-                alt="SWOT"
-                className="max-h-64 rounded-lg md:max-h-96"
-              />
               <img
                 src="https://i.imgur.com/hTwP5hK.png"
                 alt="DEM"
                 className="max-h-64 rounded-lg md:max-h-96"
               />
+              <img
+                src="https://i.imgur.com/nLlCS8E.png"
+                alt="SWOT"
+                className="max-h-64 rounded-lg md:max-h-96"
+              />
             </div>
             <p className="text-sm md:text-base">
-              Here are some of the sample .STL files that you can create. (Left is terrain elevation and right is SWOT water level)
+              Here are some of the sample .STL files that you can create. (Left is DEM and right is SWOT water level). It looks like the left terrain is a foresty area!
             </p>
             <div className="flex flex-col items-center justify-center gap-10 md:flex-row">
               <img
