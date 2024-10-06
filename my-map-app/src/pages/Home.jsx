@@ -5,7 +5,6 @@ function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const images = [
-    "/public/animation/Property 1=Variant1.svg",
     "/public/animation/Property 1=Variant2.svg",
     "/public/animation/Property 1=Variant3.svg",
     "/public/animation/Property 1=Variant4.svg",
@@ -73,7 +72,7 @@ function Home() {
       <img
         src={images[currentImageIndex]}
         alt="animated satellite"
-        className="absolute right-0 top-0 z-10 scale-50 brightness-75 md:-right-[20%] md:top-[10%] md:scale-100"
+        className="absolute right-0 top-0 z-10 scale-50 brightness-75 md:-right-[15%] md:top-[10%] md:scale-100"
         onMouseEnter={() => setHovering(true)}
         onMouseLeave={() => setHovering(false)}
       />
