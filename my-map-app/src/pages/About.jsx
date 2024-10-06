@@ -55,7 +55,15 @@ function About() {
       <div>
         <h1 className="mt-24 text-center text-6xl font-semibold">About Us</h1>
         <div className="mt-10 h-3/5 rounded-3xl bg-lightblue p-10">
-          description goes here
+          <p>
+            Mapping X was created for the "Community Mapping" Challenge for the
+            NASA Space Apps 2024 Oshawa Event. Authors of this project are
+            Jeremy Mark Tubongbanua, Jeska Maya Tubongbanua, and Jerry Shum
+          </p>
+          Figma Prototyping:
+          <img src="https://i.imgur.com/xLHJ1nM.png" alt="figma prototyping" />
+          How It Works:
+          <img src="https://i.imgur.com/N8jt1sZ.png" alt="how it works" />
         </div>
       </div>
     </div>

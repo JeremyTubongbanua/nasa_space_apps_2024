@@ -42,6 +42,25 @@ function Map() {
               dataset
             </li>
           </ol>
+          <p>
+            Currently, since satellite data is VERY large in storage size, it
+            was very hard to get a lot of images. So right now, we only support
+            datasets that are in the South Ontario area, and we currenetly do
+            not cover a whole large area, because we were limited by how much of
+            that data we were able to hold on our server even when scaling the
+            resolution down.{" "}
+          </p>
+          <br />
+          <p>
+            You will have the option of overlaying the map with either DEM data
+            (Digital Elevation Model) or SWOT data (Surface Water and Ocean
+            Topography). You can also overlay both DEM and SWOT data. DEM Data
+            overlay sample
+            <img src="https://i.imgur.com/nLlCS8E.png" alt="SWOT" />
+            SWOT Data overlay sample
+            <img src="https://i.imgur.com/hTwP5hK.png" alt="DEM" />
+          </p>
+          <p>Here are some of the sample .STL files that you can create</p>
         </div>
       </div>
       <div className="mt-24 flex flex-col items-center justify-center gap-4">
