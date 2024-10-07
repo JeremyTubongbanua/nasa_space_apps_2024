@@ -1,5 +1,13 @@
 # nasa_space_apps_2024
 
+- [nasa_space_apps_2024](#nasa-space-apps-2024)
+  - [Overview](#overview)
+  - [Links](#links)
+  - [How It Works](#how-it-works)
+  - [Key Components](#key-components)
+  - [Tech Used](#tech-used)
+  - [Samples](#samples)
+
 ## Overview
 
 Mapping X is a web-based interactive Geographical Information System (GIS) tool that lets you generate .STL. meshes from Digital Elevation Model (DEM) data and Surface Water and Ocean Topography (SWOT) data from open-source NASA Earthview data. The generated STL meshes can be used for 3D printing for observation which can be used for terrain and water elevation analysis.
