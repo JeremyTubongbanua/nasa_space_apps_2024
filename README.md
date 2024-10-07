@@ -18,10 +18,15 @@ Mapping X is a web-based interactive Geographical Information System (GIS) tool 
 
 ![How it works](./assets/EGqX8QF.png)
 
+## Key Components
+
 Check out key components such as:
 
 - [SWOT convert.py](./backend/data/swot/convert.py)
 - [DEM convert.py](./backend/data/dem/convert.py)
+- [backend flask server](./backend/server.py)
+- [backend test scripts](./backend/tests)
+- [frontend](./my-map-app/)
 
 ## Tech Used
 
