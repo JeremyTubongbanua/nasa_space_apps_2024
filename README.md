@@ -14,9 +14,9 @@ Mapping X is a web-based interactive Geographical Information System (GIS) tool 
 ## How It Works
 
 1. We have to manually import ncDF (SWOT) and .tif (DEM) files into the backend/data/ folder. Then, each of the sub folders (swot and dem) have their own `convert.py` script that converts the ncDF and .tif files into .csv and .png files for each file. Lots of resolution is lost in this process because there are just too many coordinates (longitude, latitude). The .csv and .png files are then stored in the backend/data/ folder, where the .csv file has columns longitude, latitude, and elevation, and the .png file is a representation that can be overlayed on the map.
-2. Now that we've converted our data appropriately, we can serve the frontend whena  request is made when a rectangular bounding box is drawn on the map. The frontend sends a request where the backend will receive thelongitude and latitude of the bounding box, and determine which .CSVs are needed to generate the .STL file. Then we simply generate a .STL file from the elvation data from the .CSVs with geometry and volume using numpy and send that back to the frontend.
+2. Now that we've converted our data appropriately, we can serve the frontend when a request is made when a rectangular bounding box is drawn on the map. The frontend sends a request where the backend will receive the longitude and latitude of the bounding box, and determine which .CSVs are needed to generate the .STL file. Then we simply generate a .STL file from the elevation data from the .CSVs with geometry and volume using numpy and send that back to the frontend.
 
-![How it works](./assets//EGqX8QF.png)
+![How it works](./assets/EGqX8QF.png)
 
 Check out key components such as:
 
@@ -49,20 +49,20 @@ FIGMA prototyping
 
 High Level overview of how it works
 
-![alt text](image.png)
+![alt text](./assets/image.png)
 
 SWOT of Lake Huron
 
-![alt text](image-1.png)
+![alt text](./assets/image-1.png)
 
 SWOT of Lake Ontario
 
-![alt text](image-2.png)
+![alt text](./assets/image-2.png)
 
 Application (why is it useful)
 
-![alt text](image-3.png)
+![alt text](./assets/image-3.png)
 
 Future improvements
 
-![alt text](image-4.png)
+![alt text](./assets/image-4.png)
