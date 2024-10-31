@@ -1,0 +1,17 @@
+blinker==1.8.2
+click==8.1.7
+Flask==3.0.3
+Flask-Cors==5.0.0
+itsdangerous==2.2.0
+Jinja2==3.1.4
+MarkupSafe==3.0.2
+numpy==2.1.2
+numpy-stl==3.1.2
+pexpect==4.9.0
+ptyprocess==0.7.0
+pyinotify==0.9.6
+python-utils==3.9.0
+scipy==1.14.1
+scpy==1.1.4
+typing_extensions==4.12.2
+Werkzeug==3.1.0

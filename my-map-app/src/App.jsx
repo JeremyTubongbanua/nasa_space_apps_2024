@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css"; // Leaflet CSS
 import "leaflet-draw/dist/leaflet.draw.css"; // Leaflet Draw CSS
 import DrawControl from "./DrawControl"; // Your DrawControl component
 
-const BASE_URL = "http://159.203.60.247:5001";
+const BASE_URL = "http://67.217.243.8:5001";
 
 function App() {
   const [elevationData, setElevationData] = useState([]);
