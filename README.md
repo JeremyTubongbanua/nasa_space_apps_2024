@@ -16,7 +16,7 @@ Mapping X is a web-based interactive Geographical Information System (GIS) tool 
 
 - Long form video (5 minutes) - <https://www.youtube.com/watch?v=ficv-n9h3qk>
 - Short form video (30 seconds) - <https://www.youtube.com/watch?v=AShcmuF7qmU>
-- Live Project Demo - <http://159.203.60.247/>
+- Live Project Demo - <http://67.217.243.8//>
 - GitHub Repository - <https://github.com/JeremyTubongbanua/nasa_space_apps_2024/>
 
 ## How It Works
